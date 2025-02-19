@@ -1,7 +1,10 @@
 requests~=2.32.3
 beautifulsoup4~=4.13.3
-python-dotenv
-selenium
+python-dotenv~=1.0.1
+selenium~=4.28.1
+peewee~=3.17.9
+fastapi
+uvicorn
 
 # testing
 pytest

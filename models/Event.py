@@ -1,16 +1,16 @@
-from datetime import datetime
-from dataclasses import dataclass
+from peewee import CharField, DateField, FloatField, BooleanField
+
+from models.BaseModel import BaseModel
 
 
-@dataclass
-class Event:
-    name: str
-    date: datetime
-    location: str
-    price: float
-    stillPlacesLeft: bool
-    url: str
-    image_url: str
+class Event(BaseModel):
+    name = CharField()
+    date = DateField()
+    location = CharField()
+    price = FloatField()
+    stillPlacesLeft = BooleanField()
+    url = CharField()
+    image_url = CharField(max_length=1024)
 
     def to_html(self):
         return f"""

@@ -3,7 +3,7 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-from Event import Event
+from models.Event import Event
 from utils.utils import generate_html_for_events
 from dotenv import load_dotenv
 

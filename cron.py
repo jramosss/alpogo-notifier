@@ -1,6 +1,6 @@
 from datetime import datetime
-from Event import Event
-from scrapers.event_scraper import get_events
+from models.Event import Event
+from scrapers.event_scraper import EventScraper
 from notifier import send_email
 
 
@@ -14,7 +14,7 @@ def sort_events(events: list[Event]):
 
 def notify():
     date = datetime.now()
-    events = get_events()
+    events = EventScraper().scrape()
     events_to_send = sort_events(filter_events(events, date))
     if events_to_send:
         send_email(events_to_send)

@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup, ResultSet
 from bs4.element import Tag
 
-from Event import Event
+from models.Event import Event
 from scrapers.Scraper import Scraper
 from utils.utils import parse_date
 

@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 
 from scrapers.Scraper import Scraper
 from utils.constants import ALPOGO_URL
+from models.Place import Place
 
 
 class PlacesScraper(Scraper):
@@ -26,7 +27,24 @@ class PlacesScraper(Scraper):
 
     def find_places(self):
         places_elements = self.driver.find_elements(by=By.CLASS_NAME, value="lugar-link")
-        return {place.text: self.get_place_id_from_href(place.get_attribute('href')) for place in places_elements if place.text}
+        places = []
+        place_names = set()
+        for place in places_elements:
+            if not place.text:
+                continue
+            if place.text in place_names:
+                continue
+            places.append(
+                Place(
+                    name=place.text,
+                    url=place.get_attribute('href'),
+                    id=self.get_place_id_from_href(place.get_attribute('href')),
+                    # TODO: enhance scraper to go into every place and extract image
+                    image_url=""
+                )
+            )
+            place_names.add(place.text)
+        return places
 
     def scrape(self):
         self.driver.get(f"{ALPOGO_URL}")

@@ -2,7 +2,7 @@ import datetime
 import re
 from unicodedata import normalize
 
-from Event import Event
+from models.Event import Event
 
 
 def remove_accents_from_str(s: str):
