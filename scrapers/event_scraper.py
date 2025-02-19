@@ -1,19 +1,14 @@
-from requests import get
 from bs4 import BeautifulSoup, ResultSet
 from bs4.element import Tag
 
 from Event import Event
-from utils import parse_date
+from utils.utils import parse_date
 
-ALPOGO_URL = 'https://alpogo.com'
-# MUSICA_A_CIEGAS_PLACE_ID = 1253
-PLACE_ID = 1681
-MUSICA_A_CIEGAS_URL = f'{ALPOGO_URL}/lugar/{PLACE_ID}'
 
 def get_html():
     # response = get(MUSICA_A_CIEGAS_URL)
     # return response.text
-    with open('all_events.html', 'r') as file:
+    with open('../all_events.html', 'r') as file:
         return file.read()
 
 

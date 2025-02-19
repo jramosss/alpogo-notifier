@@ -1,6 +1,6 @@
 from datetime import datetime
 from Event import Event
-from scraper import get_events
+from scrapers.event_scraper import get_events
 from notifier import send_email
 
 
