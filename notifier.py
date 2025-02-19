@@ -1,11 +1,15 @@
+import os
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 from Event import Event
 from utils import generate_html_for_events
+from dotenv import load_dotenv
 
-TEST_EMAIL = ''
+load_dotenv('.env.development')
+
+TEST_EMAIL = os.getenv('TEST_EMAIL')
 RECIPIENTS = [
     TEST_EMAIL
 ]
@@ -20,7 +24,10 @@ def send_email(events: list[Event]):
     msg['From'] = me
     msg['To'] = ', '.join(RECIPIENTS)
     msg['Content-Type'] = 'text/html'
-    msg.attach(MIMEText(generate_html_for_events(events), 'html'))
+    html = generate_html_for_events(events)
+    msg.attach(MIMEText(html, 'html'))
+    with open('generated.html', 'w') as file:
+        file.write(html)
 
     with smtplib.SMTP(smtp_server, smtp_port) as server:
         server.sendmail(me, RECIPIENTS, msg.as_string())

@@ -56,6 +56,7 @@ def generate_html_for_events(events: list[Event]):
     <!DOCTYPE html>
     <html>
     <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <title>Event List</title>
     <style>
     .event-container {
@@ -74,6 +75,10 @@ def generate_html_for_events(events: list[Event]):
         font-size: 1.2em;
         font-weight: bold;
         margin-bottom: 10px;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .event-detail {
@@ -107,6 +112,37 @@ def generate_html_for_events(events: list[Event]):
 
     .event-list-container {
         text-align: center; /* Center the events horizontally */
+    }
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+    }
+    
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 300px;
+      background-color: gray;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 10px;
+
+      /* Position the tooltip text - see examples below! */
+      position: absolute;
+      z-index: 1;
+    }
+
+    .tooltip .tooltiptext {
+      width: 120px;
+      top: 50%;
+      left: 50%;
+      margin-left: -60px; /* Use half of the width (120/2 = 60), to center the tooltip */
+    }
+
+    /* Show the tooltip text when you mouse over the tooltip container */
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
     }
     </style>
     </head>
