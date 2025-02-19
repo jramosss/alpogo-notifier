@@ -11,6 +11,7 @@ class Event:
     stillPlacesLeft: bool
     url: str
     image_url: str
+    disk_name: str
 
     def to_html(self):
         availability_class = "available" if self.stillPlacesLeft else "unavailable"
@@ -20,6 +21,7 @@ class Event:
         <div class="event-container">
             <div class="event-title">{self.name}</div>
             <img src="{self.image_url}" alt="{self.name}" style="width: 100%; border-radius: 8px;">
+            <div class="event-detail"><strong>Disk Name:</strong> {self.disk_name}</div>
             <div class="event-detail"><strong>Date:</strong> {self.date.strftime('%B %d, %Y, %H:%M')}</div>
             <div class="event-detail"><strong>Location:</strong> {self.location}</div>
             <div class="event-detail"><strong>Price:</strong> ${self.price}</div>

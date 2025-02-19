@@ -1,6 +1,10 @@
 import datetime
 import re
 from unicodedata import normalize
+from PIL import Image
+import requests
+from io import BytesIO
+from pytesseract import image_to_string
 
 from Event import Event
 
@@ -49,6 +53,19 @@ def parse_date(date_string: str):
     except ValueError as e:
         print(f"Error parsing date: {e}", date_string)
         return None
+
+
+def get_text_from_image(image_url: str):
+    response = requests.get(image_url)
+    img = Image.open(BytesIO(response.content))
+    text = image_to_string(img, lang="spa", config="words")
+    return text
+
+
+def get_disk_name_from_image(image_url: str):
+    text = get_text_from_image(image_url)
+    split = text.split('\n')
+    return split[9]
 
 
 def generate_html_for_events(events: list[Event]):

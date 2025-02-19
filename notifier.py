@@ -5,7 +5,7 @@ from email.mime.text import MIMEText
 from Event import Event
 from utils import generate_html_for_events
 
-TEST_EMAIL = ''
+TEST_EMAIL = 'jramostod@gmail.com'
 RECIPIENTS = [
     TEST_EMAIL
 ]
