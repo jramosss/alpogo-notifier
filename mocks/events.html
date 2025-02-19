@@ -1,0 +1,887 @@
+<html ng-app="mailhogApp" class="ng-scope">
+<head>
+    <style type="text/css">@charset "UTF-8";
+    [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak, .ng-hide:not(.ng-hide-animate) {
+        display: none !important;
+    }
+
+    ng\:form {
+        display: block;
+    }</style>
+    <title>MailHog</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="referrer" content="no-referrer">
+
+    <link rel="icon" type="image/png" href="images/hog.png">
+
+    <link rel="stylesheet" href="css/jquery-ui-1.10.4-smoothness.css">
+    <link rel="stylesheet" href="css/bootstrap-3.3.2.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body ng-controller="MailCtrl" ng-click="keepopen=false" style="" class="ng-scope">
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container-fluid">
+        <div class="col-md-2 col-sm-3">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                    <img src="images/hog.png" height="20" alt="MailHog"> MailHog
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-10 col-sm-9">
+            <form class="navbar-form navbar-left ng-pristine ng-valid" role="search">
+                <div class="form-group left-inner-addon">
+                    <i class="glyphicon glyphicon-search"></i>
+
+                    <input ng-model="searchText" type="text" ng-key-enter="search('containing', searchText)"
+                           class="form-control ng-pristine ng-untouched ng-valid" autocomplete="off"
+                           placeholder="Search" id="search" ng-focus="keepopen=true"
+                           ng-click="$event.stopPropagation()">
+
+                    <!-- ngIf: searchText.length > 0 && keepopen -->
+                </div>
+            </form>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a target="_blank" href="https://github.com/mailhog/MailHog">
+                        <img src="images/github.png" height="16" alt="GitHub"> GitHub
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 col-sm-3">
+            <ul class="nav nav-pills nav-stacked">
+                <li>
+                    <a href="#" title="Event stream connected" ng-click="toggleStream()" class="ng-binding">
+                        <span class="glyphicon glyphicon-off has-event-source"></span>
+                        Connected
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#" ng-click="backToInboxFirst()" class="ng-binding">
+                        Inbox (4)
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#" ng-click="deleteAll()">
+                        <span class="glyphicon glyphicon-remove-circle"></span>
+                        Delete all messages
+                    </a>
+                </li>
+            </ul>
+
+            <div class="well jim-well">
+                <h3>Jim</h3>
+                <p>
+                    Jim is a chaos monkey.<br>
+                    <a href="https://github.com/mailhog/MailHog/blob/master/docs/JIM.md" target="_blank">Find out more
+                        at GitHub</a>.
+                </p>
+                <!-- ngIf: jim -->
+                <!-- ngIf: jim -->
+                <!-- ngIf: !jim -->
+                <div ng-if="!jim" class="ng-scope">
+                    <a href="#" ng-click="enableJim()" class="btn btn-xs btn-default">Enable Jim</a>
+                </div><!-- end ngIf: !jim -->
+            </div>
+        </div>
+
+        <div class="col-md-10 col-sm-9 content">
+            <!-- ngIf: !preview && !searching -->
+
+            <!-- ngIf: !preview && !searching -->
+
+            <!-- ngIf: searching -->
+
+            <!-- ngIf: searching -->
+
+            <!-- ngIf: preview -->
+            <div class="toolbar ng-scope" ng-if="preview">
+                <button class="btn btn-default" ng-click="backToInbox()" title="Back to Inbox">
+                    <i class="glyphicon glyphicon-arrow-left"></i>
+                </button>
+
+                <div class="spacer"></div>
+
+                <button class="btn btn-default" ng-click="deleteOne(preview); preview = null">
+                    <i class="glyphicon glyphicon-trash"></i>
+                </button>
+
+                <a class="btn btn-default" title="Download"
+                   href="api/v1/messages/RA41UuUjouc8QjDHRenstOIv1S93m60FZ8Wr3R8bc0E=@mailhog.example/download">
+                    <i class="glyphicon glyphicon-save"></i>
+                </a>
+
+                <button class="btn btn-default" title="Release" ng-click="releaseOne(preview)">
+                    <i class="glyphicon glyphicon-share"></i>
+                </button>
+            </div><!-- end ngIf: preview -->
+
+            <!-- ngIf: preview -->
+            <div class="preview ng-scope" ng-if="preview">
+                <div class="row headers">
+                    <div class="col-md-10">
+                        <table>
+                            <!-- ngIf: !previewAllHeaders -->
+                            <tbody ng-if="!previewAllHeaders" class="ng-scope">
+                            <tr>
+                                <th>From</th>
+                                <td class="ng-binding">test@test.com</td>
+                            </tr>
+                            <tr>
+                                <th>Subject</th>
+                                <td><strong class="ng-binding">Eventos de musica a ciegas este mes</strong></td>
+                            </tr>
+                            <tr>
+                                <th>To</th>
+                                <td class="ng-binding">
+                                    test@test.com
+                                </td>
+                            </tr>
+                            </tbody><!-- end ngIf: !previewAllHeaders -->
+                            <!-- ngIf: previewAllHeaders -->
+                        </table>
+                    </div>
+                    <div class="col-md-2">
+                        <!-- ngIf: previewAllHeaders -->
+
+                        <!-- ngIf: !previewAllHeaders -->
+                        <button id="show-headers" ng-if="!previewAllHeaders" ng-click="toggleHeaders(true)"
+                                type="button" class="btn btn-default pull-right btn-xs ng-scope">
+                            Show headers <i class="glyphicon glyphicon-chevron-down"></i>
+                        </button><!-- end ngIf: !previewAllHeaders -->
+                    </div>
+                </div>
+
+                <div class="mail-content">
+                    <ul class="nav nav-tabs">
+                        <!-- ngIf: hasHTML(preview) -->
+                        <li ng-if="hasHTML(preview)" ng-class="{ active: hasHTML(preview) }" class="ng-scope active"><a
+                                href="#preview-html" data-toggle="tab">HTML</a></li><!-- end ngIf: hasHTML(preview) -->
+                        <li ng-class="{ active: !hasHTML(preview) }"><a href="#preview-plain" data-toggle="tab">Plain
+                            text</a></li>
+                        <li><a href="#preview-source" data-toggle="tab">Source</a></li>
+                        <!-- ngIf: preview.MIME -->
+                        <li ng-if="preview.MIME" class="ng-scope"><a href="#preview-mime" data-toggle="tab">MIME</a>
+                        </li><!-- end ngIf: preview.MIME -->
+                    </ul>
+
+                    <div class="tab-content" style="height: 676px;">
+                        <!-- ngIf: hasHTML(preview) -->
+                        <iframe target-blank="" ng-if="hasHTML(preview)" ng-class="{ active: hasHTML(preview) }"
+                                class="tab-pane ng-scope active" id="preview-html" srcdoc="
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <title>Event List</title>
+    <style>
+    .event-container {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        width: 300px; /* Adjust as needed */
+        margin: 20px;
+        font-family: sans-serif;
+        display: inline-block; /* Display events horizontally */
+        vertical-align: top; /* Align events to the top */
+    }
+
+    .event-title {
+        font-size: 1.2em;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .event-detail {
+        margin-bottom: 5px;
+    }
+
+    .available {
+        color: green;
+        font-weight: bold;
+    }
+
+    .unavailable {
+        color: red;
+        font-weight: bold;
+    }
+
+    .event-link {
+        display: block;
+        margin-top: 10px;
+        padding: 8px 12px;
+        background-color: #4CAF50;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        text-align: center;
+    }
+
+    .event-link:hover {
+        background-color: #367C39;
+    }
+
+    .event-list-container {
+        text-align: center; /* Center the events horizontally */
+    }
+    </style>
+    </head>
+    <body>
+    <div class=&quot;event-list-container&quot;>
+
+        <div class=&quot;event-container&quot;>
+            <div class=&quot;event-title&quot;>Marina Fages en Liverpool</div>
+            <img src=&quot;https://imagenes.alpogo.com/eventos/alta_evento_1734038997_675b55d50ff5d.jpg&quot; alt=&quot;Marina Fages en Liverpool&quot; style=&quot;width: 300px; height: 300px; border-radius: 8px;&quot;>
+            <div class=&quot;event-detail&quot;><strong>Date:</strong> February 22, 2025, 20:00</div>
+            <div class=&quot;event-detail&quot;><strong>Location:</strong> Liverpool Club, Palermo</div>
+            <div class=&quot;event-detail&quot;><strong>Price:</strong> $10000.0</div>
+            <a href=&quot;https://alpogo.com/evento/marina-fages-en-liverpool-18035&quot; class=&quot;event-link&quot;>
+                View Event
+            </a>
+        </div>
+
+        <div class=&quot;event-container&quot;>
+            <div class=&quot;event-title&quot;>Sakatumba en Liverpool</div>
+            <img src=&quot;https://imagenes.alpogo.com/eventos/alta_evento_1737753477_679403851270f.jpg&quot; alt=&quot;Sakatumba en Liverpool&quot; style=&quot;width: 300px; height: 300px; border-radius: 8px;&quot;>
+            <div class=&quot;event-detail&quot;><strong>Date:</strong> February 28, 2025, 20:00</div>
+            <div class=&quot;event-detail&quot;><strong>Location:</strong> Liverpool Club, Palermo</div>
+            <div class=&quot;event-detail&quot;><strong>Price:</strong> $6500.0</div>
+            <a href=&quot;https://alpogo.com/evento/sakatumba-en-liverpool-18462&quot; class=&quot;event-link&quot;>
+                View Event
+            </a>
+        </div>
+
+        <div class=&quot;event-container&quot;>
+            <div class=&quot;event-title&quot;>INTERZINE PRESENTA A CANDELABRO EN LIVERPOOL</div>
+            <img src=&quot;https://imagenes.alpogo.com/eventos/alta_evento_1734030360_675b34189e974.jpg&quot; alt=&quot;INTERZINE PRESENTA A CANDELABRO EN LIVERPOOL&quot; style=&quot;width: 300px; height: 300px; border-radius: 8px;&quot;>
+            <div class=&quot;event-detail&quot;><strong>Date:</strong> March 01, 2025, 20:00</div>
+            <div class=&quot;event-detail&quot;><strong>Location:</strong> Liverpool Club, Palermo</div>
+            <div class=&quot;event-detail&quot;><strong>Price:</strong> $7000.0</div>
+            <a href=&quot;https://alpogo.com/evento/interzine-presenta-a-candelabro-en-liverpool-18032&quot; class=&quot;event-link&quot;>
+                View Event
+            </a>
+        </div>
+
+        <div class=&quot;event-container&quot;>
+            <div class=&quot;event-title&quot;>Mauro Valenti  y banda + La Perla Irregular + El Presidente en Liverpool</div>
+            <img src=&quot;https://imagenes.alpogo.com/eventos/Laperlaliverppp.jpg&quot; alt=&quot;Mauro Valenti  y banda + La Perla Irregular + El Presidente en Liverpool&quot; style=&quot;width: 300px; height: 300px; border-radius: 8px;&quot;>
+            <div class=&quot;event-detail&quot;><strong>Date:</strong> March 07, 2025, 20:30</div>
+            <div class=&quot;event-detail&quot;><strong>Location:</strong> Liverpool Club, Palermo</div>
+            <div class=&quot;event-detail&quot;><strong>Price:</strong> $5000.0</div>
+            <a href=&quot;https://alpogo.com/evento/mauro-valenti-y-banda-la-perla-irregular-el-presidente-en-liverpool-18705&quot; class=&quot;event-link&quot;>
+                View Event
+            </a>
+        </div>
+
+        <div class=&quot;event-container&quot;>
+            <div class=&quot;event-title&quot;>Piba - Carolo - Fletes Rakel en Liverpool</div>
+            <img src=&quot;https://imagenes.alpogo.com/eventos/fletero.png&quot; alt=&quot;Piba - Carolo - Fletes Rakel en Liverpool&quot; style=&quot;width: 300px; height: 300px; border-radius: 8px;&quot;>
+            <div class=&quot;event-detail&quot;><strong>Date:</strong> March 08, 2025, 20:00</div>
+            <div class=&quot;event-detail&quot;><strong>Location:</strong> Liverpool Club, Palermo</div>
+            <div class=&quot;event-detail&quot;><strong>Price:</strong> $5000.0</div>
+            <a href=&quot;https://alpogo.com/evento/piba-carolo-fletes-rakel-en-liverpool-18668&quot; class=&quot;event-link&quot;>
+                View Event
+            </a>
+        </div>
+
+        <div class=&quot;event-container&quot;>
+            <div class=&quot;event-title&quot;>Komo Yamarte - Ostra Damus y Porteros Eléctricos en Liverpool</div>
+            <img src=&quot;https://imagenes.alpogo.com/eventos/Liverpoolnd.JPG&quot; alt=&quot;Komo Yamarte - Ostra Damus y Porteros Eléctricos en Liverpool&quot; style=&quot;width: 300px; height: 300px; border-radius: 8px;&quot;>
+            <div class=&quot;event-detail&quot;><strong>Date:</strong> March 13, 2025, 21:00</div>
+            <div class=&quot;event-detail&quot;><strong>Location:</strong> Liverpool Club, Palermo</div>
+            <div class=&quot;event-detail&quot;><strong>Price:</strong> $5000.0</div>
+            <a href=&quot;https://alpogo.com/evento/komo-yamarte-ostra-damus-y-porteros-electricos-en-liverpool-18550&quot; class=&quot;event-link&quot;>
+                View Event
+            </a>
+        </div>
+
+        <div class=&quot;event-container&quot;>
+            <div class=&quot;event-title&quot;>Paula Maffia &amp; y Las Malas Lenguas</div>
+            <img src=&quot;https://imagenes.alpogo.com/eventos/alta_evento_1739279285_67ab4bb54989e.jpg&quot; alt=&quot;Paula Maffia &amp; y Las Malas Lenguas&quot; style=&quot;width: 300px; height: 300px; border-radius: 8px;&quot;>
+            <div class=&quot;event-detail&quot;><strong>Date:</strong> March 15, 2025, 20:00</div>
+            <div class=&quot;event-detail&quot;><strong>Location:</strong> Liverpool Club, Palermo</div>
+            <div class=&quot;event-detail&quot;><strong>Price:</strong> $12000.0</div>
+            <a href=&quot;https://alpogo.com/evento/paula-maffia-y-las-malas-lenguas-18685&quot; class=&quot;event-link&quot;>
+                View Event
+            </a>
+        </div>
+
+        <div class=&quot;event-container&quot;>
+            <div class=&quot;event-title&quot;>Daniel Melero + Farmacia + Surmenage en Liverpool</div>
+            <img src=&quot;https://imagenes.alpogo.com/eventos/Liverbverbver.jpg&quot; alt=&quot;Daniel Melero + Farmacia + Surmenage en Liverpool&quot; style=&quot;width: 300px; height: 300px; border-radius: 8px;&quot;>
+            <div class=&quot;event-detail&quot;><strong>Date:</strong> March 16, 2025, 20:00</div>
+            <div class=&quot;event-detail&quot;><strong>Location:</strong> Liverpool Club, Palermo</div>
+            <div class=&quot;event-detail&quot;><strong>Price:</strong> $13000.0</div>
+            <a href=&quot;https://alpogo.com/evento/daniel-melero-farmacia-surmenage-en-liverpool-18857&quot; class=&quot;event-link&quot;>
+                View Event
+            </a>
+        </div>
+
+        <div class=&quot;event-container&quot;>
+            <div class=&quot;event-title&quot;>Rock y Pasion en Liverpool</div>
+            <img src=&quot;https://imagenes.alpogo.com/eventos/Rockyliverpimag.JPG&quot; alt=&quot;Rock y Pasion en Liverpool&quot; style=&quot;width: 300px; height: 300px; border-radius: 8px;&quot;>
+            <div class=&quot;event-detail&quot;><strong>Date:</strong> March 21, 2025, 20:00</div>
+            <div class=&quot;event-detail&quot;><strong>Location:</strong> Liverpool Club, Palermo</div>
+            <div class=&quot;event-detail&quot;><strong>Price:</strong> $5000.0</div>
+            <a href=&quot;https://alpogo.com/evento/rock-y-pasion-en-liverpool-18856&quot; class=&quot;event-link&quot;>
+                View Event
+            </a>
+        </div>
+
+        <div class=&quot;event-container&quot;>
+            <div class=&quot;event-title&quot;>Fiesta homenaje a Los Piojos y Los Redondos en Liverpool</div>
+            <img src=&quot;https://imagenes.alpogo.com/eventos/redondos.jpeg&quot; alt=&quot;Fiesta homenaje a Los Piojos y Los Redondos en Liverpool&quot; style=&quot;width: 300px; height: 300px; border-radius: 8px;&quot;>
+            <div class=&quot;event-detail&quot;><strong>Date:</strong> March 22, 2025, 20:30</div>
+            <div class=&quot;event-detail&quot;><strong>Location:</strong> Liverpool Club, Palermo</div>
+            <div class=&quot;event-detail&quot;><strong>Price:</strong> $10000.0</div>
+            <a href=&quot;https://alpogo.com/evento/fiesta-homenaje-a-los-piojos-y-los-redondos-en-liverpool-18694&quot; class=&quot;event-link&quot;>
+                View Event
+            </a>
+        </div>
+
+        <div class=&quot;event-container&quot;>
+            <div class=&quot;event-title&quot;>Presentacion de disco de Hijos de la sangre y Glassrows en Liverpool</div>
+            <img src=&quot;https://imagenes.alpogo.com/eventos/Glasliver.jpg&quot; alt=&quot;Presentacion de disco de Hijos de la sangre y Glassrows en Liverpool&quot; style=&quot;width: 300px; height: 300px; border-radius: 8px;&quot;>
+            <div class=&quot;event-detail&quot;><strong>Date:</strong> May 02, 2025, 20:00</div>
+            <div class=&quot;event-detail&quot;><strong>Location:</strong> Liverpool Club, Palermo</div>
+            <div class=&quot;event-detail&quot;><strong>Price:</strong> $3000.0</div>
+            <a href=&quot;https://alpogo.com/evento/presentacion-de-disco-de-hijos-de-la-sangre-y-glassrows-en-liverpool-18673&quot; class=&quot;event-link&quot;>
+                View Event
+            </a>
+        </div>
+
+    </div>
+    </body>
+    </html>
+    " seamless="" frameborder="0" style="width: 100%; height: 676px;"></iframe><!-- end ngIf: hasHTML(preview) -->
+                        <div class="tab-pane ng-binding" ng-class="{ active: !hasHTML(preview) }" id="preview-plain"
+                             ng-bind-html="formatMessagePlain(preview)" style="height: 696px;">
+                            --===============3818927959190970026==
+                            Content-Type: text/html; charset="utf-8"
+                            MIME-Version: 1.0
+                            Content-Transfer-Encoding: base64
+
+                            CiAgICA8IURPQ1RZUEUgaHRtbD4KICAgIDxodG1sPgogICAgPGhlYWQ+CiAgICA8dGl0bGU+RXZl
+                            bnQgTGlzdDwvdGl0bGU+CiAgICA8c3R5bGU+CiAgICAuZXZlbnQtY29udGFpbmVyIHsKICAgICAg
+                            ICBiYWNrZ3JvdW5kLWNvbG9yOiB3aGl0ZTsKICAgICAgICBib3JkZXItcmFkaXVzOiA4cHg7CiAg
+                            ICAgICAgYm94LXNoYWRvdzogMCA0cHggOHB4IHJnYmEoMCwgMCwgMCwgMC4yKTsKICAgICAgICBw
+                            YWRkaW5nOiAyMHB4OwogICAgICAgIHdpZHRoOiAzMDBweDsgLyogQWRqdXN0IGFzIG5lZWRlZCAq
+                            LwogICAgICAgIG1hcmdpbjogMjBweDsKICAgICAgICBmb250LWZhbWlseTogc2Fucy1zZXJpZjsK
+                            ICAgICAgICBkaXNwbGF5OiBpbmxpbmUtYmxvY2s7IC8qIERpc3BsYXkgZXZlbnRzIGhvcml6b250
+                            YWxseSAqLwogICAgICAgIHZlcnRpY2FsLWFsaWduOiB0b3A7IC8qIEFsaWduIGV2ZW50cyB0byB0
+                            aGUgdG9wICovCiAgICB9CgogICAgLmV2ZW50LXRpdGxlIHsKICAgICAgICBmb250LXNpemU6IDEu
+                            MmVtOwogICAgICAgIGZvbnQtd2VpZ2h0OiBib2xkOwogICAgICAgIG1hcmdpbi1ib3R0b206IDEw
+                            cHg7CiAgICB9CgogICAgLmV2ZW50LWRldGFpbCB7CiAgICAgICAgbWFyZ2luLWJvdHRvbTogNXB4
+                            OwogICAgfQoKICAgIC5hdmFpbGFibGUgewogICAgICAgIGNvbG9yOiBncmVlbjsKICAgICAgICBm
+                            b250LXdlaWdodDogYm9sZDsKICAgIH0KCiAgICAudW5hdmFpbGFibGUgewogICAgICAgIGNvbG9y
+                            OiByZWQ7CiAgICAgICAgZm9udC13ZWlnaHQ6IGJvbGQ7CiAgICB9CgogICAgLmV2ZW50LWxpbmsg
+                            ewogICAgICAgIGRpc3BsYXk6IGJsb2NrOwogICAgICAgIG1hcmdpbi10b3A6IDEwcHg7CiAgICAg
+                            ICAgcGFkZGluZzogOHB4IDEycHg7CiAgICAgICAgYmFja2dyb3VuZC1jb2xvcjogIzRDQUY1MDsK
+                            ICAgICAgICBjb2xvcjogd2hpdGU7CiAgICAgICAgdGV4dC1kZWNvcmF0aW9uOiBub25lOwogICAg
+                            ICAgIGJvcmRlci1yYWRpdXM6IDRweDsKICAgICAgICB0ZXh0LWFsaWduOiBjZW50ZXI7CiAgICB9
+                            CgogICAgLmV2ZW50LWxpbms6aG92ZXIgewogICAgICAgIGJhY2tncm91bmQtY29sb3I6ICMzNjdD
+                            Mzk7CiAgICB9CgogICAgLmV2ZW50LWxpc3QtY29udGFpbmVyIHsKICAgICAgICB0ZXh0LWFsaWdu
+                            OiBjZW50ZXI7IC8qIENlbnRlciB0aGUgZXZlbnRzIGhvcml6b250YWxseSAqLwogICAgfQogICAg
+                            PC9zdHlsZT4KICAgIDwvaGVhZD4KICAgIDxib2R5PgogICAgPGRpdiBjbGFzcz0iZXZlbnQtbGlz
+                            dC1jb250YWluZXIiPgogICAgCiAgICAgICAgPGRpdiBjbGFzcz0iZXZlbnQtY29udGFpbmVyIj4K
+                            ICAgICAgICAgICAgPGRpdiBjbGFzcz0iZXZlbnQtdGl0bGUiPk1hcmluYSBGYWdlcyBlbiBMaXZl
+                            cnBvb2w8L2Rpdj4KICAgICAgICAgICAgPGltZyBzcmM9Imh0dHBzOi8vaW1hZ2VuZXMuYWxwb2dv
+                            LmNvbS9ldmVudG9zL2FsdGFfZXZlbnRvXzE3MzQwMzg5OTdfNjc1YjU1ZDUwZmY1ZC5qcGciIGFs
+                            dD0iTWFyaW5hIEZhZ2VzIGVuIExpdmVycG9vbCIgc3R5bGU9IndpZHRoOiAzMDBweDsgaGVpZ2h0
+                            OiAzMDBweDsgYm9yZGVyLXJhZGl1czogOHB4OyI+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9ImV2
+                            ZW50LWRldGFpbCI+PHN0cm9uZz5EYXRlOjwvc3Ryb25nPiBGZWJydWFyeSAyMiwgMjAyNSwgMjA6
+                            MDA8L2Rpdj4KICAgICAgICAgICAgPGRpdiBjbGFzcz0iZXZlbnQtZGV0YWlsIj48c3Ryb25nPkxv
+                            Y2F0aW9uOjwvc3Ryb25nPiBMaXZlcnBvb2wgQ2x1YiwgUGFsZXJtbzwvZGl2PgogICAgICAgICAg
+                            ICA8ZGl2IGNsYXNzPSJldmVudC1kZXRhaWwiPjxzdHJvbmc+UHJpY2U6PC9zdHJvbmc+ICQxMDAw
+                            MC4wPC9kaXY+CiAgICAgICAgICAgIDxhIGhyZWY9Imh0dHBzOi8vYWxwb2dvLmNvbS9ldmVudG8v
+                            bWFyaW5hLWZhZ2VzLWVuLWxpdmVycG9vbC0xODAzNSIgY2xhc3M9ImV2ZW50LWxpbmsiPgogICAg
+                            ICAgICAgICAgICAgVmlldyBFdmVudAogICAgICAgICAgICA8L2E+CiAgICAgICAgPC9kaXY+CiAg
+                            ICAgICAgCiAgICAgICAgPGRpdiBjbGFzcz0iZXZlbnQtY29udGFpbmVyIj4KICAgICAgICAgICAg
+                            PGRpdiBjbGFzcz0iZXZlbnQtdGl0bGUiPlNha2F0dW1iYSBlbiBMaXZlcnBvb2w8L2Rpdj4KICAg
+                            ICAgICAgICAgPGltZyBzcmM9Imh0dHBzOi8vaW1hZ2VuZXMuYWxwb2dvLmNvbS9ldmVudG9zL2Fs
+                            dGFfZXZlbnRvXzE3Mzc3NTM0NzdfNjc5NDAzODUxMjcwZi5qcGciIGFsdD0iU2FrYXR1bWJhIGVu
+                            IExpdmVycG9vbCIgc3R5bGU9IndpZHRoOiAzMDBweDsgaGVpZ2h0OiAzMDBweDsgYm9yZGVyLXJh
+                            ZGl1czogOHB4OyI+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LWRldGFpbCI+PHN0cm9u
+                            Zz5EYXRlOjwvc3Ryb25nPiBGZWJydWFyeSAyOCwgMjAyNSwgMjA6MDA8L2Rpdj4KICAgICAgICAg
+                            ICAgPGRpdiBjbGFzcz0iZXZlbnQtZGV0YWlsIj48c3Ryb25nPkxvY2F0aW9uOjwvc3Ryb25nPiBM
+                            aXZlcnBvb2wgQ2x1YiwgUGFsZXJtbzwvZGl2PgogICAgICAgICAgICA8ZGl2IGNsYXNzPSJldmVu
+                            dC1kZXRhaWwiPjxzdHJvbmc+UHJpY2U6PC9zdHJvbmc+ICQ2NTAwLjA8L2Rpdj4KICAgICAgICAg
+                            ICAgPGEgaHJlZj0iaHR0cHM6Ly9hbHBvZ28uY29tL2V2ZW50by9zYWthdHVtYmEtZW4tbGl2ZXJw
+                            b29sLTE4NDYyIiBjbGFzcz0iZXZlbnQtbGluayI+CiAgICAgICAgICAgICAgICBWaWV3IEV2ZW50
+                            CiAgICAgICAgICAgIDwvYT4KICAgICAgICA8L2Rpdj4KICAgICAgICAKICAgICAgICA8ZGl2IGNs
+                            YXNzPSJldmVudC1jb250YWluZXIiPgogICAgICAgICAgICA8ZGl2IGNsYXNzPSJldmVudC10aXRs
+                            ZSI+SU5URVJaSU5FIFBSRVNFTlRBIEEgQ0FOREVMQUJSTyBFTiBMSVZFUlBPT0w8L2Rpdj4KICAg
+                            ICAgICAgICAgPGltZyBzcmM9Imh0dHBzOi8vaW1hZ2VuZXMuYWxwb2dvLmNvbS9ldmVudG9zL2Fs
+                            dGFfZXZlbnRvXzE3MzQwMzAzNjBfNjc1YjM0MTg5ZTk3NC5qcGciIGFsdD0iSU5URVJaSU5FIFBS
+                            RVNFTlRBIEEgQ0FOREVMQUJSTyBFTiBMSVZFUlBPT0wiIHN0eWxlPSJ3aWR0aDogMzAwcHg7IGhl
+                            aWdodDogMzAwcHg7IGJvcmRlci1yYWRpdXM6IDhweDsiPgogICAgICAgICAgICA8ZGl2IGNsYXNz
+                            PSJldmVudC1kZXRhaWwiPjxzdHJvbmc+RGF0ZTo8L3N0cm9uZz4gTWFyY2ggMDEsIDIwMjUsIDIw
+                            OjAwPC9kaXY+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LWRldGFpbCI+PHN0cm9uZz5M
+                            b2NhdGlvbjo8L3N0cm9uZz4gTGl2ZXJwb29sIENsdWIsIFBhbGVybW88L2Rpdj4KICAgICAgICAg
+                            ICAgPGRpdiBjbGFzcz0iZXZlbnQtZGV0YWlsIj48c3Ryb25nPlByaWNlOjwvc3Ryb25nPiAkNzAw
+                            MC4wPC9kaXY+CiAgICAgICAgICAgIDxhIGhyZWY9Imh0dHBzOi8vYWxwb2dvLmNvbS9ldmVudG8v
+                            aW50ZXJ6aW5lLXByZXNlbnRhLWEtY2FuZGVsYWJyby1lbi1saXZlcnBvb2wtMTgwMzIiIGNsYXNz
+                            PSJldmVudC1saW5rIj4KICAgICAgICAgICAgICAgIFZpZXcgRXZlbnQKICAgICAgICAgICAgPC9h
+                            PgogICAgICAgIDwvZGl2PgogICAgICAgIAogICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LWNvbnRh
+                            aW5lciI+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LXRpdGxlIj5NYXVybyBWYWxlbnRp
+                            ICB5IGJhbmRhICsgTGEgUGVybGEgSXJyZWd1bGFyICsgRWwgUHJlc2lkZW50ZSBlbiBMaXZlcnBv
+                            b2w8L2Rpdj4KICAgICAgICAgICAgPGltZyBzcmM9Imh0dHBzOi8vaW1hZ2VuZXMuYWxwb2dvLmNv
+                            bS9ldmVudG9zL0xhcGVybGFsaXZlcnBwcC5qcGciIGFsdD0iTWF1cm8gVmFsZW50aSAgeSBiYW5k
+                            YSArIExhIFBlcmxhIElycmVndWxhciArIEVsIFByZXNpZGVudGUgZW4gTGl2ZXJwb29sIiBzdHls
+                            ZT0id2lkdGg6IDMwMHB4OyBoZWlnaHQ6IDMwMHB4OyBib3JkZXItcmFkaXVzOiA4cHg7Ij4KICAg
+                            ICAgICAgICAgPGRpdiBjbGFzcz0iZXZlbnQtZGV0YWlsIj48c3Ryb25nPkRhdGU6PC9zdHJvbmc+
+                            IE1hcmNoIDA3LCAyMDI1LCAyMDozMDwvZGl2PgogICAgICAgICAgICA8ZGl2IGNsYXNzPSJldmVu
+                            dC1kZXRhaWwiPjxzdHJvbmc+TG9jYXRpb246PC9zdHJvbmc+IExpdmVycG9vbCBDbHViLCBQYWxl
+                            cm1vPC9kaXY+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LWRldGFpbCI+PHN0cm9uZz5Q
+                            cmljZTo8L3N0cm9uZz4gJDUwMDAuMDwvZGl2PgogICAgICAgICAgICA8YSBocmVmPSJodHRwczov
+                            L2FscG9nby5jb20vZXZlbnRvL21hdXJvLXZhbGVudGkteS1iYW5kYS1sYS1wZXJsYS1pcnJlZ3Vs
+                            YXItZWwtcHJlc2lkZW50ZS1lbi1saXZlcnBvb2wtMTg3MDUiIGNsYXNzPSJldmVudC1saW5rIj4K
+                            ICAgICAgICAgICAgICAgIFZpZXcgRXZlbnQKICAgICAgICAgICAgPC9hPgogICAgICAgIDwvZGl2
+                            PgogICAgICAgIAogICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LWNvbnRhaW5lciI+CiAgICAgICAg
+                            ICAgIDxkaXYgY2xhc3M9ImV2ZW50LXRpdGxlIj5QaWJhIC0gQ2Fyb2xvIC0gRmxldGVzIFJha2Vs
+                            IGVuIExpdmVycG9vbDwvZGl2PgogICAgICAgICAgICA8aW1nIHNyYz0iaHR0cHM6Ly9pbWFnZW5l
+                            cy5hbHBvZ28uY29tL2V2ZW50b3MvZmxldGVyby5wbmciIGFsdD0iUGliYSAtIENhcm9sbyAtIEZs
+                            ZXRlcyBSYWtlbCBlbiBMaXZlcnBvb2wiIHN0eWxlPSJ3aWR0aDogMzAwcHg7IGhlaWdodDogMzAw
+                            cHg7IGJvcmRlci1yYWRpdXM6IDhweDsiPgogICAgICAgICAgICA8ZGl2IGNsYXNzPSJldmVudC1k
+                            ZXRhaWwiPjxzdHJvbmc+RGF0ZTo8L3N0cm9uZz4gTWFyY2ggMDgsIDIwMjUsIDIwOjAwPC9kaXY+
+                            CiAgICAgICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LWRldGFpbCI+PHN0cm9uZz5Mb2NhdGlvbjo8
+                            L3N0cm9uZz4gTGl2ZXJwb29sIENsdWIsIFBhbGVybW88L2Rpdj4KICAgICAgICAgICAgPGRpdiBj
+                            bGFzcz0iZXZlbnQtZGV0YWlsIj48c3Ryb25nPlByaWNlOjwvc3Ryb25nPiAkNTAwMC4wPC9kaXY+
+                            CiAgICAgICAgICAgIDxhIGhyZWY9Imh0dHBzOi8vYWxwb2dvLmNvbS9ldmVudG8vcGliYS1jYXJv
+                            bG8tZmxldGVzLXJha2VsLWVuLWxpdmVycG9vbC0xODY2OCIgY2xhc3M9ImV2ZW50LWxpbmsiPgog
+                            ICAgICAgICAgICAgICAgVmlldyBFdmVudAogICAgICAgICAgICA8L2E+CiAgICAgICAgPC9kaXY+
+                            CiAgICAgICAgCiAgICAgICAgPGRpdiBjbGFzcz0iZXZlbnQtY29udGFpbmVyIj4KICAgICAgICAg
+                            ICAgPGRpdiBjbGFzcz0iZXZlbnQtdGl0bGUiPktvbW8gWWFtYXJ0ZSAtIE9zdHJhIERhbXVzIHkg
+                            UG9ydGVyb3MgRWzDqWN0cmljb3MgZW4gTGl2ZXJwb29sPC9kaXY+CiAgICAgICAgICAgIDxpbWcg
+                            c3JjPSJodHRwczovL2ltYWdlbmVzLmFscG9nby5jb20vZXZlbnRvcy9MaXZlcnBvb2xuZC5KUEci
+                            IGFsdD0iS29tbyBZYW1hcnRlIC0gT3N0cmEgRGFtdXMgeSBQb3J0ZXJvcyBFbMOpY3RyaWNvcyBl
+                            biBMaXZlcnBvb2wiIHN0eWxlPSJ3aWR0aDogMzAwcHg7IGhlaWdodDogMzAwcHg7IGJvcmRlci1y
+                            YWRpdXM6IDhweDsiPgogICAgICAgICAgICA8ZGl2IGNsYXNzPSJldmVudC1kZXRhaWwiPjxzdHJv
+                            bmc+RGF0ZTo8L3N0cm9uZz4gTWFyY2ggMTMsIDIwMjUsIDIxOjAwPC9kaXY+CiAgICAgICAgICAg
+                            IDxkaXYgY2xhc3M9ImV2ZW50LWRldGFpbCI+PHN0cm9uZz5Mb2NhdGlvbjo8L3N0cm9uZz4gTGl2
+                            ZXJwb29sIENsdWIsIFBhbGVybW88L2Rpdj4KICAgICAgICAgICAgPGRpdiBjbGFzcz0iZXZlbnQt
+                            ZGV0YWlsIj48c3Ryb25nPlByaWNlOjwvc3Ryb25nPiAkNTAwMC4wPC9kaXY+CiAgICAgICAgICAg
+                            IDxhIGhyZWY9Imh0dHBzOi8vYWxwb2dvLmNvbS9ldmVudG8va29tby15YW1hcnRlLW9zdHJhLWRh
+                            bXVzLXktcG9ydGVyb3MtZWxlY3RyaWNvcy1lbi1saXZlcnBvb2wtMTg1NTAiIGNsYXNzPSJldmVu
+                            dC1saW5rIj4KICAgICAgICAgICAgICAgIFZpZXcgRXZlbnQKICAgICAgICAgICAgPC9hPgogICAg
+                            ICAgIDwvZGl2PgogICAgICAgIAogICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LWNvbnRhaW5lciI+
+                            CiAgICAgICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LXRpdGxlIj5QYXVsYSBNYWZmaWEgJiB5IExh
+                            cyBNYWxhcyBMZW5ndWFzPC9kaXY+CiAgICAgICAgICAgIDxpbWcgc3JjPSJodHRwczovL2ltYWdl
+                            bmVzLmFscG9nby5jb20vZXZlbnRvcy9hbHRhX2V2ZW50b18xNzM5Mjc5Mjg1XzY3YWI0YmI1NDk4
+                            OWUuanBnIiBhbHQ9IlBhdWxhIE1hZmZpYSAmIHkgTGFzIE1hbGFzIExlbmd1YXMiIHN0eWxlPSJ3
+                            aWR0aDogMzAwcHg7IGhlaWdodDogMzAwcHg7IGJvcmRlci1yYWRpdXM6IDhweDsiPgogICAgICAg
+                            ICAgICA8ZGl2IGNsYXNzPSJldmVudC1kZXRhaWwiPjxzdHJvbmc+RGF0ZTo8L3N0cm9uZz4gTWFy
+                            Y2ggMTUsIDIwMjUsIDIwOjAwPC9kaXY+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LWRl
+                            dGFpbCI+PHN0cm9uZz5Mb2NhdGlvbjo8L3N0cm9uZz4gTGl2ZXJwb29sIENsdWIsIFBhbGVybW88
+                            L2Rpdj4KICAgICAgICAgICAgPGRpdiBjbGFzcz0iZXZlbnQtZGV0YWlsIj48c3Ryb25nPlByaWNl
+                            Ojwvc3Ryb25nPiAkMTIwMDAuMDwvZGl2PgogICAgICAgICAgICA8YSBocmVmPSJodHRwczovL2Fs
+                            cG9nby5jb20vZXZlbnRvL3BhdWxhLW1hZmZpYS15LWxhcy1tYWxhcy1sZW5ndWFzLTE4Njg1IiBj
+                            bGFzcz0iZXZlbnQtbGluayI+CiAgICAgICAgICAgICAgICBWaWV3IEV2ZW50CiAgICAgICAgICAg
+                            IDwvYT4KICAgICAgICA8L2Rpdj4KICAgICAgICAKICAgICAgICA8ZGl2IGNsYXNzPSJldmVudC1j
+                            b250YWluZXIiPgogICAgICAgICAgICA8ZGl2IGNsYXNzPSJldmVudC10aXRsZSI+RGFuaWVsIE1l
+                            bGVybyArIEZhcm1hY2lhICsgU3VybWVuYWdlIGVuIExpdmVycG9vbDwvZGl2PgogICAgICAgICAg
+                            ICA8aW1nIHNyYz0iaHR0cHM6Ly9pbWFnZW5lcy5hbHBvZ28uY29tL2V2ZW50b3MvTGl2ZXJidmVy
+                            YnZlci5qcGciIGFsdD0iRGFuaWVsIE1lbGVybyArIEZhcm1hY2lhICsgU3VybWVuYWdlIGVuIExp
+                            dmVycG9vbCIgc3R5bGU9IndpZHRoOiAzMDBweDsgaGVpZ2h0OiAzMDBweDsgYm9yZGVyLXJhZGl1
+                            czogOHB4OyI+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LWRldGFpbCI+PHN0cm9uZz5E
+                            YXRlOjwvc3Ryb25nPiBNYXJjaCAxNiwgMjAyNSwgMjA6MDA8L2Rpdj4KICAgICAgICAgICAgPGRp
+                            diBjbGFzcz0iZXZlbnQtZGV0YWlsIj48c3Ryb25nPkxvY2F0aW9uOjwvc3Ryb25nPiBMaXZlcnBv
+                            b2wgQ2x1YiwgUGFsZXJtbzwvZGl2PgogICAgICAgICAgICA8ZGl2IGNsYXNzPSJldmVudC1kZXRh
+                            aWwiPjxzdHJvbmc+UHJpY2U6PC9zdHJvbmc+ICQxMzAwMC4wPC9kaXY+CiAgICAgICAgICAgIDxh
+                            IGhyZWY9Imh0dHBzOi8vYWxwb2dvLmNvbS9ldmVudG8vZGFuaWVsLW1lbGVyby1mYXJtYWNpYS1z
+                            dXJtZW5hZ2UtZW4tbGl2ZXJwb29sLTE4ODU3IiBjbGFzcz0iZXZlbnQtbGluayI+CiAgICAgICAg
+                            ICAgICAgICBWaWV3IEV2ZW50CiAgICAgICAgICAgIDwvYT4KICAgICAgICA8L2Rpdj4KICAgICAg
+                            ICAKICAgICAgICA8ZGl2IGNsYXNzPSJldmVudC1jb250YWluZXIiPgogICAgICAgICAgICA8ZGl2
+                            IGNsYXNzPSJldmVudC10aXRsZSI+Um9jayB5IFBhc2lvbiBlbiBMaXZlcnBvb2w8L2Rpdj4KICAg
+                            ICAgICAgICAgPGltZyBzcmM9Imh0dHBzOi8vaW1hZ2VuZXMuYWxwb2dvLmNvbS9ldmVudG9zL1Jv
+                            Y2t5bGl2ZXJwaW1hZy5KUEciIGFsdD0iUm9jayB5IFBhc2lvbiBlbiBMaXZlcnBvb2wiIHN0eWxl
+                            PSJ3aWR0aDogMzAwcHg7IGhlaWdodDogMzAwcHg7IGJvcmRlci1yYWRpdXM6IDhweDsiPgogICAg
+                            ICAgICAgICA8ZGl2IGNsYXNzPSJldmVudC1kZXRhaWwiPjxzdHJvbmc+RGF0ZTo8L3N0cm9uZz4g
+                            TWFyY2ggMjEsIDIwMjUsIDIwOjAwPC9kaXY+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50
+                            LWRldGFpbCI+PHN0cm9uZz5Mb2NhdGlvbjo8L3N0cm9uZz4gTGl2ZXJwb29sIENsdWIsIFBhbGVy
+                            bW88L2Rpdj4KICAgICAgICAgICAgPGRpdiBjbGFzcz0iZXZlbnQtZGV0YWlsIj48c3Ryb25nPlBy
+                            aWNlOjwvc3Ryb25nPiAkNTAwMC4wPC9kaXY+CiAgICAgICAgICAgIDxhIGhyZWY9Imh0dHBzOi8v
+                            YWxwb2dvLmNvbS9ldmVudG8vcm9jay15LXBhc2lvbi1lbi1saXZlcnBvb2wtMTg4NTYiIGNsYXNz
+                            PSJldmVudC1saW5rIj4KICAgICAgICAgICAgICAgIFZpZXcgRXZlbnQKICAgICAgICAgICAgPC9h
+                            PgogICAgICAgIDwvZGl2PgogICAgICAgIAogICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LWNvbnRh
+                            aW5lciI+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LXRpdGxlIj5GaWVzdGEgaG9tZW5h
+                            amUgYSBMb3MgUGlvam9zIHkgTG9zIFJlZG9uZG9zIGVuIExpdmVycG9vbDwvZGl2PgogICAgICAg
+                            ICAgICA8aW1nIHNyYz0iaHR0cHM6Ly9pbWFnZW5lcy5hbHBvZ28uY29tL2V2ZW50b3MvcmVkb25k
+                            b3MuanBlZyIgYWx0PSJGaWVzdGEgaG9tZW5hamUgYSBMb3MgUGlvam9zIHkgTG9zIFJlZG9uZG9z
+                            IGVuIExpdmVycG9vbCIgc3R5bGU9IndpZHRoOiAzMDBweDsgaGVpZ2h0OiAzMDBweDsgYm9yZGVy
+                            LXJhZGl1czogOHB4OyI+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LWRldGFpbCI+PHN0
+                            cm9uZz5EYXRlOjwvc3Ryb25nPiBNYXJjaCAyMiwgMjAyNSwgMjA6MzA8L2Rpdj4KICAgICAgICAg
+                            ICAgPGRpdiBjbGFzcz0iZXZlbnQtZGV0YWlsIj48c3Ryb25nPkxvY2F0aW9uOjwvc3Ryb25nPiBM
+                            aXZlcnBvb2wgQ2x1YiwgUGFsZXJtbzwvZGl2PgogICAgICAgICAgICA8ZGl2IGNsYXNzPSJldmVu
+                            dC1kZXRhaWwiPjxzdHJvbmc+UHJpY2U6PC9zdHJvbmc+ICQxMDAwMC4wPC9kaXY+CiAgICAgICAg
+                            ICAgIDxhIGhyZWY9Imh0dHBzOi8vYWxwb2dvLmNvbS9ldmVudG8vZmllc3RhLWhvbWVuYWplLWEt
+                            bG9zLXBpb2pvcy15LWxvcy1yZWRvbmRvcy1lbi1saXZlcnBvb2wtMTg2OTQiIGNsYXNzPSJldmVu
+                            dC1saW5rIj4KICAgICAgICAgICAgICAgIFZpZXcgRXZlbnQKICAgICAgICAgICAgPC9hPgogICAg
+                            ICAgIDwvZGl2PgogICAgICAgIAogICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LWNvbnRhaW5lciI+
+                            CiAgICAgICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LXRpdGxlIj5QcmVzZW50YWNpb24gZGUgZGlz
+                            Y28gZGUgSGlqb3MgZGUgbGEgc2FuZ3JlIHkgR2xhc3Nyb3dzIGVuIExpdmVycG9vbDwvZGl2Pgog
+                            ICAgICAgICAgICA8aW1nIHNyYz0iaHR0cHM6Ly9pbWFnZW5lcy5hbHBvZ28uY29tL2V2ZW50b3Mv
+                            R2xhc2xpdmVyLmpwZyIgYWx0PSJQcmVzZW50YWNpb24gZGUgZGlzY28gZGUgSGlqb3MgZGUgbGEg
+                            c2FuZ3JlIHkgR2xhc3Nyb3dzIGVuIExpdmVycG9vbCIgc3R5bGU9IndpZHRoOiAzMDBweDsgaGVp
+                            Z2h0OiAzMDBweDsgYm9yZGVyLXJhZGl1czogOHB4OyI+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9
+                            ImV2ZW50LWRldGFpbCI+PHN0cm9uZz5EYXRlOjwvc3Ryb25nPiBNYXkgMDIsIDIwMjUsIDIwOjAw
+                            PC9kaXY+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LWRldGFpbCI+PHN0cm9uZz5Mb2Nh
+                            dGlvbjo8L3N0cm9uZz4gTGl2ZXJwb29sIENsdWIsIFBhbGVybW88L2Rpdj4KICAgICAgICAgICAg
+                            PGRpdiBjbGFzcz0iZXZlbnQtZGV0YWlsIj48c3Ryb25nPlByaWNlOjwvc3Ryb25nPiAkMzAwMC4w
+                            PC9kaXY+CiAgICAgICAgICAgIDxhIGhyZWY9Imh0dHBzOi8vYWxwb2dvLmNvbS9ldmVudG8vcHJl
+                            c2VudGFjaW9uLWRlLWRpc2NvLWRlLWhpam9zLWRlLWxhLXNhbmdyZS15LWdsYXNzcm93cy1lbi1s
+                            aXZlcnBvb2wtMTg2NzMiIGNsYXNzPSJldmVudC1saW5rIj4KICAgICAgICAgICAgICAgIFZpZXcg
+                            RXZlbnQKICAgICAgICAgICAgPC9hPgogICAgICAgIDwvZGl2PgogICAgICAgIAogICAgPC9kaXY+
+                            CiAgICA8L2JvZHk+CiAgICA8L2h0bWw+CiAgICA=
+
+                            --===============3818927959190970026==--
+                        </div>
+                        <div class="tab-pane ng-binding" id="preview-source" style="height: 696px;">Content-Type:
+                            multipart/mixed; boundary="===============3818927959190970026=="
+                            From: test@test.com
+                            MIME-Version: 1.0
+                            Message-ID: RA41UuUjouc8QjDHRenstOIv1S93m60FZ8Wr3R8bc0E=@mailhog.example
+                            Received: from 6.1.168.192.in-addr.arpa by mailhog.example (MailHog)
+                            id RA41UuUjouc8QjDHRenstOIv1S93m60FZ8Wr3R8bc0E=@mailhog.example; Wed, 19 Feb 2025 17:54:21
+                            -0300
+                            Return-Path: &lt;test@test.com&gt;
+                            Subject: Eventos de musica a ciegas este mes
+                            To: test@test.com
+
+                            --===============3818927959190970026==
+                            Content-Type: text/html; charset="utf-8"
+                            MIME-Version: 1.0
+                            Content-Transfer-Encoding: base64
+
+                            CiAgICA8IURPQ1RZUEUgaHRtbD4KICAgIDxodG1sPgogICAgPGhlYWQ+CiAgICA8dGl0bGU+RXZl
+                            bnQgTGlzdDwvdGl0bGU+CiAgICA8c3R5bGU+CiAgICAuZXZlbnQtY29udGFpbmVyIHsKICAgICAg
+                            ICBiYWNrZ3JvdW5kLWNvbG9yOiB3aGl0ZTsKICAgICAgICBib3JkZXItcmFkaXVzOiA4cHg7CiAg
+                            ICAgICAgYm94LXNoYWRvdzogMCA0cHggOHB4IHJnYmEoMCwgMCwgMCwgMC4yKTsKICAgICAgICBw
+                            YWRkaW5nOiAyMHB4OwogICAgICAgIHdpZHRoOiAzMDBweDsgLyogQWRqdXN0IGFzIG5lZWRlZCAq
+                            LwogICAgICAgIG1hcmdpbjogMjBweDsKICAgICAgICBmb250LWZhbWlseTogc2Fucy1zZXJpZjsK
+                            ICAgICAgICBkaXNwbGF5OiBpbmxpbmUtYmxvY2s7IC8qIERpc3BsYXkgZXZlbnRzIGhvcml6b250
+                            YWxseSAqLwogICAgICAgIHZlcnRpY2FsLWFsaWduOiB0b3A7IC8qIEFsaWduIGV2ZW50cyB0byB0
+                            aGUgdG9wICovCiAgICB9CgogICAgLmV2ZW50LXRpdGxlIHsKICAgICAgICBmb250LXNpemU6IDEu
+                            MmVtOwogICAgICAgIGZvbnQtd2VpZ2h0OiBib2xkOwogICAgICAgIG1hcmdpbi1ib3R0b206IDEw
+                            cHg7CiAgICB9CgogICAgLmV2ZW50LWRldGFpbCB7CiAgICAgICAgbWFyZ2luLWJvdHRvbTogNXB4
+                            OwogICAgfQoKICAgIC5hdmFpbGFibGUgewogICAgICAgIGNvbG9yOiBncmVlbjsKICAgICAgICBm
+                            b250LXdlaWdodDogYm9sZDsKICAgIH0KCiAgICAudW5hdmFpbGFibGUgewogICAgICAgIGNvbG9y
+                            OiByZWQ7CiAgICAgICAgZm9udC13ZWlnaHQ6IGJvbGQ7CiAgICB9CgogICAgLmV2ZW50LWxpbmsg
+                            ewogICAgICAgIGRpc3BsYXk6IGJsb2NrOwogICAgICAgIG1hcmdpbi10b3A6IDEwcHg7CiAgICAg
+                            ICAgcGFkZGluZzogOHB4IDEycHg7CiAgICAgICAgYmFja2dyb3VuZC1jb2xvcjogIzRDQUY1MDsK
+                            ICAgICAgICBjb2xvcjogd2hpdGU7CiAgICAgICAgdGV4dC1kZWNvcmF0aW9uOiBub25lOwogICAg
+                            ICAgIGJvcmRlci1yYWRpdXM6IDRweDsKICAgICAgICB0ZXh0LWFsaWduOiBjZW50ZXI7CiAgICB9
+                            CgogICAgLmV2ZW50LWxpbms6aG92ZXIgewogICAgICAgIGJhY2tncm91bmQtY29sb3I6ICMzNjdD
+                            Mzk7CiAgICB9CgogICAgLmV2ZW50LWxpc3QtY29udGFpbmVyIHsKICAgICAgICB0ZXh0LWFsaWdu
+                            OiBjZW50ZXI7IC8qIENlbnRlciB0aGUgZXZlbnRzIGhvcml6b250YWxseSAqLwogICAgfQogICAg
+                            PC9zdHlsZT4KICAgIDwvaGVhZD4KICAgIDxib2R5PgogICAgPGRpdiBjbGFzcz0iZXZlbnQtbGlz
+                            dC1jb250YWluZXIiPgogICAgCiAgICAgICAgPGRpdiBjbGFzcz0iZXZlbnQtY29udGFpbmVyIj4K
+                            ICAgICAgICAgICAgPGRpdiBjbGFzcz0iZXZlbnQtdGl0bGUiPk1hcmluYSBGYWdlcyBlbiBMaXZl
+                            cnBvb2w8L2Rpdj4KICAgICAgICAgICAgPGltZyBzcmM9Imh0dHBzOi8vaW1hZ2VuZXMuYWxwb2dv
+                            LmNvbS9ldmVudG9zL2FsdGFfZXZlbnRvXzE3MzQwMzg5OTdfNjc1YjU1ZDUwZmY1ZC5qcGciIGFs
+                            dD0iTWFyaW5hIEZhZ2VzIGVuIExpdmVycG9vbCIgc3R5bGU9IndpZHRoOiAzMDBweDsgaGVpZ2h0
+                            OiAzMDBweDsgYm9yZGVyLXJhZGl1czogOHB4OyI+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9ImV2
+                            ZW50LWRldGFpbCI+PHN0cm9uZz5EYXRlOjwvc3Ryb25nPiBGZWJydWFyeSAyMiwgMjAyNSwgMjA6
+                            MDA8L2Rpdj4KICAgICAgICAgICAgPGRpdiBjbGFzcz0iZXZlbnQtZGV0YWlsIj48c3Ryb25nPkxv
+                            Y2F0aW9uOjwvc3Ryb25nPiBMaXZlcnBvb2wgQ2x1YiwgUGFsZXJtbzwvZGl2PgogICAgICAgICAg
+                            ICA8ZGl2IGNsYXNzPSJldmVudC1kZXRhaWwiPjxzdHJvbmc+UHJpY2U6PC9zdHJvbmc+ICQxMDAw
+                            MC4wPC9kaXY+CiAgICAgICAgICAgIDxhIGhyZWY9Imh0dHBzOi8vYWxwb2dvLmNvbS9ldmVudG8v
+                            bWFyaW5hLWZhZ2VzLWVuLWxpdmVycG9vbC0xODAzNSIgY2xhc3M9ImV2ZW50LWxpbmsiPgogICAg
+                            ICAgICAgICAgICAgVmlldyBFdmVudAogICAgICAgICAgICA8L2E+CiAgICAgICAgPC9kaXY+CiAg
+                            ICAgICAgCiAgICAgICAgPGRpdiBjbGFzcz0iZXZlbnQtY29udGFpbmVyIj4KICAgICAgICAgICAg
+                            PGRpdiBjbGFzcz0iZXZlbnQtdGl0bGUiPlNha2F0dW1iYSBlbiBMaXZlcnBvb2w8L2Rpdj4KICAg
+                            ICAgICAgICAgPGltZyBzcmM9Imh0dHBzOi8vaW1hZ2VuZXMuYWxwb2dvLmNvbS9ldmVudG9zL2Fs
+                            dGFfZXZlbnRvXzE3Mzc3NTM0NzdfNjc5NDAzODUxMjcwZi5qcGciIGFsdD0iU2FrYXR1bWJhIGVu
+                            IExpdmVycG9vbCIgc3R5bGU9IndpZHRoOiAzMDBweDsgaGVpZ2h0OiAzMDBweDsgYm9yZGVyLXJh
+                            ZGl1czogOHB4OyI+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LWRldGFpbCI+PHN0cm9u
+                            Zz5EYXRlOjwvc3Ryb25nPiBGZWJydWFyeSAyOCwgMjAyNSwgMjA6MDA8L2Rpdj4KICAgICAgICAg
+                            ICAgPGRpdiBjbGFzcz0iZXZlbnQtZGV0YWlsIj48c3Ryb25nPkxvY2F0aW9uOjwvc3Ryb25nPiBM
+                            aXZlcnBvb2wgQ2x1YiwgUGFsZXJtbzwvZGl2PgogICAgICAgICAgICA8ZGl2IGNsYXNzPSJldmVu
+                            dC1kZXRhaWwiPjxzdHJvbmc+UHJpY2U6PC9zdHJvbmc+ICQ2NTAwLjA8L2Rpdj4KICAgICAgICAg
+                            ICAgPGEgaHJlZj0iaHR0cHM6Ly9hbHBvZ28uY29tL2V2ZW50by9zYWthdHVtYmEtZW4tbGl2ZXJw
+                            b29sLTE4NDYyIiBjbGFzcz0iZXZlbnQtbGluayI+CiAgICAgICAgICAgICAgICBWaWV3IEV2ZW50
+                            CiAgICAgICAgICAgIDwvYT4KICAgICAgICA8L2Rpdj4KICAgICAgICAKICAgICAgICA8ZGl2IGNs
+                            YXNzPSJldmVudC1jb250YWluZXIiPgogICAgICAgICAgICA8ZGl2IGNsYXNzPSJldmVudC10aXRs
+                            ZSI+SU5URVJaSU5FIFBSRVNFTlRBIEEgQ0FOREVMQUJSTyBFTiBMSVZFUlBPT0w8L2Rpdj4KICAg
+                            ICAgICAgICAgPGltZyBzcmM9Imh0dHBzOi8vaW1hZ2VuZXMuYWxwb2dvLmNvbS9ldmVudG9zL2Fs
+                            dGFfZXZlbnRvXzE3MzQwMzAzNjBfNjc1YjM0MTg5ZTk3NC5qcGciIGFsdD0iSU5URVJaSU5FIFBS
+                            RVNFTlRBIEEgQ0FOREVMQUJSTyBFTiBMSVZFUlBPT0wiIHN0eWxlPSJ3aWR0aDogMzAwcHg7IGhl
+                            aWdodDogMzAwcHg7IGJvcmRlci1yYWRpdXM6IDhweDsiPgogICAgICAgICAgICA8ZGl2IGNsYXNz
+                            PSJldmVudC1kZXRhaWwiPjxzdHJvbmc+RGF0ZTo8L3N0cm9uZz4gTWFyY2ggMDEsIDIwMjUsIDIw
+                            OjAwPC9kaXY+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LWRldGFpbCI+PHN0cm9uZz5M
+                            b2NhdGlvbjo8L3N0cm9uZz4gTGl2ZXJwb29sIENsdWIsIFBhbGVybW88L2Rpdj4KICAgICAgICAg
+                            ICAgPGRpdiBjbGFzcz0iZXZlbnQtZGV0YWlsIj48c3Ryb25nPlByaWNlOjwvc3Ryb25nPiAkNzAw
+                            MC4wPC9kaXY+CiAgICAgICAgICAgIDxhIGhyZWY9Imh0dHBzOi8vYWxwb2dvLmNvbS9ldmVudG8v
+                            aW50ZXJ6aW5lLXByZXNlbnRhLWEtY2FuZGVsYWJyby1lbi1saXZlcnBvb2wtMTgwMzIiIGNsYXNz
+                            PSJldmVudC1saW5rIj4KICAgICAgICAgICAgICAgIFZpZXcgRXZlbnQKICAgICAgICAgICAgPC9h
+                            PgogICAgICAgIDwvZGl2PgogICAgICAgIAogICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LWNvbnRh
+                            aW5lciI+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LXRpdGxlIj5NYXVybyBWYWxlbnRp
+                            ICB5IGJhbmRhICsgTGEgUGVybGEgSXJyZWd1bGFyICsgRWwgUHJlc2lkZW50ZSBlbiBMaXZlcnBv
+                            b2w8L2Rpdj4KICAgICAgICAgICAgPGltZyBzcmM9Imh0dHBzOi8vaW1hZ2VuZXMuYWxwb2dvLmNv
+                            bS9ldmVudG9zL0xhcGVybGFsaXZlcnBwcC5qcGciIGFsdD0iTWF1cm8gVmFsZW50aSAgeSBiYW5k
+                            YSArIExhIFBlcmxhIElycmVndWxhciArIEVsIFByZXNpZGVudGUgZW4gTGl2ZXJwb29sIiBzdHls
+                            ZT0id2lkdGg6IDMwMHB4OyBoZWlnaHQ6IDMwMHB4OyBib3JkZXItcmFkaXVzOiA4cHg7Ij4KICAg
+                            ICAgICAgICAgPGRpdiBjbGFzcz0iZXZlbnQtZGV0YWlsIj48c3Ryb25nPkRhdGU6PC9zdHJvbmc+
+                            IE1hcmNoIDA3LCAyMDI1LCAyMDozMDwvZGl2PgogICAgICAgICAgICA8ZGl2IGNsYXNzPSJldmVu
+                            dC1kZXRhaWwiPjxzdHJvbmc+TG9jYXRpb246PC9zdHJvbmc+IExpdmVycG9vbCBDbHViLCBQYWxl
+                            cm1vPC9kaXY+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LWRldGFpbCI+PHN0cm9uZz5Q
+                            cmljZTo8L3N0cm9uZz4gJDUwMDAuMDwvZGl2PgogICAgICAgICAgICA8YSBocmVmPSJodHRwczov
+                            L2FscG9nby5jb20vZXZlbnRvL21hdXJvLXZhbGVudGkteS1iYW5kYS1sYS1wZXJsYS1pcnJlZ3Vs
+                            YXItZWwtcHJlc2lkZW50ZS1lbi1saXZlcnBvb2wtMTg3MDUiIGNsYXNzPSJldmVudC1saW5rIj4K
+                            ICAgICAgICAgICAgICAgIFZpZXcgRXZlbnQKICAgICAgICAgICAgPC9hPgogICAgICAgIDwvZGl2
+                            PgogICAgICAgIAogICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LWNvbnRhaW5lciI+CiAgICAgICAg
+                            ICAgIDxkaXYgY2xhc3M9ImV2ZW50LXRpdGxlIj5QaWJhIC0gQ2Fyb2xvIC0gRmxldGVzIFJha2Vs
+                            IGVuIExpdmVycG9vbDwvZGl2PgogICAgICAgICAgICA8aW1nIHNyYz0iaHR0cHM6Ly9pbWFnZW5l
+                            cy5hbHBvZ28uY29tL2V2ZW50b3MvZmxldGVyby5wbmciIGFsdD0iUGliYSAtIENhcm9sbyAtIEZs
+                            ZXRlcyBSYWtlbCBlbiBMaXZlcnBvb2wiIHN0eWxlPSJ3aWR0aDogMzAwcHg7IGhlaWdodDogMzAw
+                            cHg7IGJvcmRlci1yYWRpdXM6IDhweDsiPgogICAgICAgICAgICA8ZGl2IGNsYXNzPSJldmVudC1k
+                            ZXRhaWwiPjxzdHJvbmc+RGF0ZTo8L3N0cm9uZz4gTWFyY2ggMDgsIDIwMjUsIDIwOjAwPC9kaXY+
+                            CiAgICAgICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LWRldGFpbCI+PHN0cm9uZz5Mb2NhdGlvbjo8
+                            L3N0cm9uZz4gTGl2ZXJwb29sIENsdWIsIFBhbGVybW88L2Rpdj4KICAgICAgICAgICAgPGRpdiBj
+                            bGFzcz0iZXZlbnQtZGV0YWlsIj48c3Ryb25nPlByaWNlOjwvc3Ryb25nPiAkNTAwMC4wPC9kaXY+
+                            CiAgICAgICAgICAgIDxhIGhyZWY9Imh0dHBzOi8vYWxwb2dvLmNvbS9ldmVudG8vcGliYS1jYXJv
+                            bG8tZmxldGVzLXJha2VsLWVuLWxpdmVycG9vbC0xODY2OCIgY2xhc3M9ImV2ZW50LWxpbmsiPgog
+                            ICAgICAgICAgICAgICAgVmlldyBFdmVudAogICAgICAgICAgICA8L2E+CiAgICAgICAgPC9kaXY+
+                            CiAgICAgICAgCiAgICAgICAgPGRpdiBjbGFzcz0iZXZlbnQtY29udGFpbmVyIj4KICAgICAgICAg
+                            ICAgPGRpdiBjbGFzcz0iZXZlbnQtdGl0bGUiPktvbW8gWWFtYXJ0ZSAtIE9zdHJhIERhbXVzIHkg
+                            UG9ydGVyb3MgRWzDqWN0cmljb3MgZW4gTGl2ZXJwb29sPC9kaXY+CiAgICAgICAgICAgIDxpbWcg
+                            c3JjPSJodHRwczovL2ltYWdlbmVzLmFscG9nby5jb20vZXZlbnRvcy9MaXZlcnBvb2xuZC5KUEci
+                            IGFsdD0iS29tbyBZYW1hcnRlIC0gT3N0cmEgRGFtdXMgeSBQb3J0ZXJvcyBFbMOpY3RyaWNvcyBl
+                            biBMaXZlcnBvb2wiIHN0eWxlPSJ3aWR0aDogMzAwcHg7IGhlaWdodDogMzAwcHg7IGJvcmRlci1y
+                            YWRpdXM6IDhweDsiPgogICAgICAgICAgICA8ZGl2IGNsYXNzPSJldmVudC1kZXRhaWwiPjxzdHJv
+                            bmc+RGF0ZTo8L3N0cm9uZz4gTWFyY2ggMTMsIDIwMjUsIDIxOjAwPC9kaXY+CiAgICAgICAgICAg
+                            IDxkaXYgY2xhc3M9ImV2ZW50LWRldGFpbCI+PHN0cm9uZz5Mb2NhdGlvbjo8L3N0cm9uZz4gTGl2
+                            ZXJwb29sIENsdWIsIFBhbGVybW88L2Rpdj4KICAgICAgICAgICAgPGRpdiBjbGFzcz0iZXZlbnQt
+                            ZGV0YWlsIj48c3Ryb25nPlByaWNlOjwvc3Ryb25nPiAkNTAwMC4wPC9kaXY+CiAgICAgICAgICAg
+                            IDxhIGhyZWY9Imh0dHBzOi8vYWxwb2dvLmNvbS9ldmVudG8va29tby15YW1hcnRlLW9zdHJhLWRh
+                            bXVzLXktcG9ydGVyb3MtZWxlY3RyaWNvcy1lbi1saXZlcnBvb2wtMTg1NTAiIGNsYXNzPSJldmVu
+                            dC1saW5rIj4KICAgICAgICAgICAgICAgIFZpZXcgRXZlbnQKICAgICAgICAgICAgPC9hPgogICAg
+                            ICAgIDwvZGl2PgogICAgICAgIAogICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LWNvbnRhaW5lciI+
+                            CiAgICAgICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LXRpdGxlIj5QYXVsYSBNYWZmaWEgJiB5IExh
+                            cyBNYWxhcyBMZW5ndWFzPC9kaXY+CiAgICAgICAgICAgIDxpbWcgc3JjPSJodHRwczovL2ltYWdl
+                            bmVzLmFscG9nby5jb20vZXZlbnRvcy9hbHRhX2V2ZW50b18xNzM5Mjc5Mjg1XzY3YWI0YmI1NDk4
+                            OWUuanBnIiBhbHQ9IlBhdWxhIE1hZmZpYSAmIHkgTGFzIE1hbGFzIExlbmd1YXMiIHN0eWxlPSJ3
+                            aWR0aDogMzAwcHg7IGhlaWdodDogMzAwcHg7IGJvcmRlci1yYWRpdXM6IDhweDsiPgogICAgICAg
+                            ICAgICA8ZGl2IGNsYXNzPSJldmVudC1kZXRhaWwiPjxzdHJvbmc+RGF0ZTo8L3N0cm9uZz4gTWFy
+                            Y2ggMTUsIDIwMjUsIDIwOjAwPC9kaXY+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LWRl
+                            dGFpbCI+PHN0cm9uZz5Mb2NhdGlvbjo8L3N0cm9uZz4gTGl2ZXJwb29sIENsdWIsIFBhbGVybW88
+                            L2Rpdj4KICAgICAgICAgICAgPGRpdiBjbGFzcz0iZXZlbnQtZGV0YWlsIj48c3Ryb25nPlByaWNl
+                            Ojwvc3Ryb25nPiAkMTIwMDAuMDwvZGl2PgogICAgICAgICAgICA8YSBocmVmPSJodHRwczovL2Fs
+                            cG9nby5jb20vZXZlbnRvL3BhdWxhLW1hZmZpYS15LWxhcy1tYWxhcy1sZW5ndWFzLTE4Njg1IiBj
+                            bGFzcz0iZXZlbnQtbGluayI+CiAgICAgICAgICAgICAgICBWaWV3IEV2ZW50CiAgICAgICAgICAg
+                            IDwvYT4KICAgICAgICA8L2Rpdj4KICAgICAgICAKICAgICAgICA8ZGl2IGNsYXNzPSJldmVudC1j
+                            b250YWluZXIiPgogICAgICAgICAgICA8ZGl2IGNsYXNzPSJldmVudC10aXRsZSI+RGFuaWVsIE1l
+                            bGVybyArIEZhcm1hY2lhICsgU3VybWVuYWdlIGVuIExpdmVycG9vbDwvZGl2PgogICAgICAgICAg
+                            ICA8aW1nIHNyYz0iaHR0cHM6Ly9pbWFnZW5lcy5hbHBvZ28uY29tL2V2ZW50b3MvTGl2ZXJidmVy
+                            YnZlci5qcGciIGFsdD0iRGFuaWVsIE1lbGVybyArIEZhcm1hY2lhICsgU3VybWVuYWdlIGVuIExp
+                            dmVycG9vbCIgc3R5bGU9IndpZHRoOiAzMDBweDsgaGVpZ2h0OiAzMDBweDsgYm9yZGVyLXJhZGl1
+                            czogOHB4OyI+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LWRldGFpbCI+PHN0cm9uZz5E
+                            YXRlOjwvc3Ryb25nPiBNYXJjaCAxNiwgMjAyNSwgMjA6MDA8L2Rpdj4KICAgICAgICAgICAgPGRp
+                            diBjbGFzcz0iZXZlbnQtZGV0YWlsIj48c3Ryb25nPkxvY2F0aW9uOjwvc3Ryb25nPiBMaXZlcnBv
+                            b2wgQ2x1YiwgUGFsZXJtbzwvZGl2PgogICAgICAgICAgICA8ZGl2IGNsYXNzPSJldmVudC1kZXRh
+                            aWwiPjxzdHJvbmc+UHJpY2U6PC9zdHJvbmc+ICQxMzAwMC4wPC9kaXY+CiAgICAgICAgICAgIDxh
+                            IGhyZWY9Imh0dHBzOi8vYWxwb2dvLmNvbS9ldmVudG8vZGFuaWVsLW1lbGVyby1mYXJtYWNpYS1z
+                            dXJtZW5hZ2UtZW4tbGl2ZXJwb29sLTE4ODU3IiBjbGFzcz0iZXZlbnQtbGluayI+CiAgICAgICAg
+                            ICAgICAgICBWaWV3IEV2ZW50CiAgICAgICAgICAgIDwvYT4KICAgICAgICA8L2Rpdj4KICAgICAg
+                            ICAKICAgICAgICA8ZGl2IGNsYXNzPSJldmVudC1jb250YWluZXIiPgogICAgICAgICAgICA8ZGl2
+                            IGNsYXNzPSJldmVudC10aXRsZSI+Um9jayB5IFBhc2lvbiBlbiBMaXZlcnBvb2w8L2Rpdj4KICAg
+                            ICAgICAgICAgPGltZyBzcmM9Imh0dHBzOi8vaW1hZ2VuZXMuYWxwb2dvLmNvbS9ldmVudG9zL1Jv
+                            Y2t5bGl2ZXJwaW1hZy5KUEciIGFsdD0iUm9jayB5IFBhc2lvbiBlbiBMaXZlcnBvb2wiIHN0eWxl
+                            PSJ3aWR0aDogMzAwcHg7IGhlaWdodDogMzAwcHg7IGJvcmRlci1yYWRpdXM6IDhweDsiPgogICAg
+                            ICAgICAgICA8ZGl2IGNsYXNzPSJldmVudC1kZXRhaWwiPjxzdHJvbmc+RGF0ZTo8L3N0cm9uZz4g
+                            TWFyY2ggMjEsIDIwMjUsIDIwOjAwPC9kaXY+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50
+                            LWRldGFpbCI+PHN0cm9uZz5Mb2NhdGlvbjo8L3N0cm9uZz4gTGl2ZXJwb29sIENsdWIsIFBhbGVy
+                            bW88L2Rpdj4KICAgICAgICAgICAgPGRpdiBjbGFzcz0iZXZlbnQtZGV0YWlsIj48c3Ryb25nPlBy
+                            aWNlOjwvc3Ryb25nPiAkNTAwMC4wPC9kaXY+CiAgICAgICAgICAgIDxhIGhyZWY9Imh0dHBzOi8v
+                            YWxwb2dvLmNvbS9ldmVudG8vcm9jay15LXBhc2lvbi1lbi1saXZlcnBvb2wtMTg4NTYiIGNsYXNz
+                            PSJldmVudC1saW5rIj4KICAgICAgICAgICAgICAgIFZpZXcgRXZlbnQKICAgICAgICAgICAgPC9h
+                            PgogICAgICAgIDwvZGl2PgogICAgICAgIAogICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LWNvbnRh
+                            aW5lciI+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LXRpdGxlIj5GaWVzdGEgaG9tZW5h
+                            amUgYSBMb3MgUGlvam9zIHkgTG9zIFJlZG9uZG9zIGVuIExpdmVycG9vbDwvZGl2PgogICAgICAg
+                            ICAgICA8aW1nIHNyYz0iaHR0cHM6Ly9pbWFnZW5lcy5hbHBvZ28uY29tL2V2ZW50b3MvcmVkb25k
+                            b3MuanBlZyIgYWx0PSJGaWVzdGEgaG9tZW5hamUgYSBMb3MgUGlvam9zIHkgTG9zIFJlZG9uZG9z
+                            IGVuIExpdmVycG9vbCIgc3R5bGU9IndpZHRoOiAzMDBweDsgaGVpZ2h0OiAzMDBweDsgYm9yZGVy
+                            LXJhZGl1czogOHB4OyI+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LWRldGFpbCI+PHN0
+                            cm9uZz5EYXRlOjwvc3Ryb25nPiBNYXJjaCAyMiwgMjAyNSwgMjA6MzA8L2Rpdj4KICAgICAgICAg
+                            ICAgPGRpdiBjbGFzcz0iZXZlbnQtZGV0YWlsIj48c3Ryb25nPkxvY2F0aW9uOjwvc3Ryb25nPiBM
+                            aXZlcnBvb2wgQ2x1YiwgUGFsZXJtbzwvZGl2PgogICAgICAgICAgICA8ZGl2IGNsYXNzPSJldmVu
+                            dC1kZXRhaWwiPjxzdHJvbmc+UHJpY2U6PC9zdHJvbmc+ICQxMDAwMC4wPC9kaXY+CiAgICAgICAg
+                            ICAgIDxhIGhyZWY9Imh0dHBzOi8vYWxwb2dvLmNvbS9ldmVudG8vZmllc3RhLWhvbWVuYWplLWEt
+                            bG9zLXBpb2pvcy15LWxvcy1yZWRvbmRvcy1lbi1saXZlcnBvb2wtMTg2OTQiIGNsYXNzPSJldmVu
+                            dC1saW5rIj4KICAgICAgICAgICAgICAgIFZpZXcgRXZlbnQKICAgICAgICAgICAgPC9hPgogICAg
+                            ICAgIDwvZGl2PgogICAgICAgIAogICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LWNvbnRhaW5lciI+
+                            CiAgICAgICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LXRpdGxlIj5QcmVzZW50YWNpb24gZGUgZGlz
+                            Y28gZGUgSGlqb3MgZGUgbGEgc2FuZ3JlIHkgR2xhc3Nyb3dzIGVuIExpdmVycG9vbDwvZGl2Pgog
+                            ICAgICAgICAgICA8aW1nIHNyYz0iaHR0cHM6Ly9pbWFnZW5lcy5hbHBvZ28uY29tL2V2ZW50b3Mv
+                            R2xhc2xpdmVyLmpwZyIgYWx0PSJQcmVzZW50YWNpb24gZGUgZGlzY28gZGUgSGlqb3MgZGUgbGEg
+                            c2FuZ3JlIHkgR2xhc3Nyb3dzIGVuIExpdmVycG9vbCIgc3R5bGU9IndpZHRoOiAzMDBweDsgaGVp
+                            Z2h0OiAzMDBweDsgYm9yZGVyLXJhZGl1czogOHB4OyI+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9
+                            ImV2ZW50LWRldGFpbCI+PHN0cm9uZz5EYXRlOjwvc3Ryb25nPiBNYXkgMDIsIDIwMjUsIDIwOjAw
+                            PC9kaXY+CiAgICAgICAgICAgIDxkaXYgY2xhc3M9ImV2ZW50LWRldGFpbCI+PHN0cm9uZz5Mb2Nh
+                            dGlvbjo8L3N0cm9uZz4gTGl2ZXJwb29sIENsdWIsIFBhbGVybW88L2Rpdj4KICAgICAgICAgICAg
+                            PGRpdiBjbGFzcz0iZXZlbnQtZGV0YWlsIj48c3Ryb25nPlByaWNlOjwvc3Ryb25nPiAkMzAwMC4w
+                            PC9kaXY+CiAgICAgICAgICAgIDxhIGhyZWY9Imh0dHBzOi8vYWxwb2dvLmNvbS9ldmVudG8vcHJl
+                            c2VudGFjaW9uLWRlLWRpc2NvLWRlLWhpam9zLWRlLWxhLXNhbmdyZS15LWdsYXNzcm93cy1lbi1s
+                            aXZlcnBvb2wtMTg2NzMiIGNsYXNzPSJldmVudC1saW5rIj4KICAgICAgICAgICAgICAgIFZpZXcg
+                            RXZlbnQKICAgICAgICAgICAgPC9hPgogICAgICAgIDwvZGl2PgogICAgICAgIAogICAgPC9kaXY+
+                            CiAgICA8L2JvZHk+CiAgICA8L2h0bWw+CiAgICA=
+
+                            --===============3818927959190970026==--
+                        </div>
+                        <div class="tab-pane" id="preview-mime" style="height: 676px;">
+                            <!-- ngRepeat: part in preview.MIME.Parts -->
+                            <div ng-repeat="part in preview.MIME.Parts" class="mime-part ng-binding ng-scope">
+                                <a href="api/v1/messages/RA41UuUjouc8QjDHRenstOIv1S93m60FZ8Wr3R8bc0E=@mailhog.example/mime/part/0/download"
+                                   type="button" class="btn btn-default btn-sm">
+                                    <i class="glyphicon glyphicon-save"></i>
+                                    Download
+                                </a>
+                                text/html; charset="utf-8" (13476 bytes)
+                            </div><!-- end ngRepeat: part in preview.MIME.Parts -->
+                            <div ng-repeat="part in preview.MIME.Parts" class="mime-part ng-binding ng-scope">
+                                <a href="api/v1/messages/RA41UuUjouc8QjDHRenstOIv1S93m60FZ8Wr3R8bc0E=@mailhog.example/mime/part/1/download"
+                                   type="button" class="btn btn-default btn-sm">
+                                    <i class="glyphicon glyphicon-save"></i>
+                                    Download
+                                </a>
+                                Unknown type (2 bytes)
+                            </div><!-- end ngRepeat: part in preview.MIME.Parts -->
+                        </div>
+                    </div>
+                </div>
+            </div><!-- end ngIf: preview -->
+
+
+            <div class="modal fade" id="confirm-delete-all">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title">Delete all messages?</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to delete all messages?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-danger" ng-click="deleteAllConfirm()">Delete all
+                                messages
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="release-one">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title">Release message</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>To release this message, select an SMTP server or enter custom settings:</p>
+                            <form role="form" class="ng-pristine ng-valid">
+                                <div class="form-group">
+                                    <select ng-model="selectedOutgoingSMTP" id="release-message-outgoing"
+                                            class="form-control ng-pristine ng-untouched ng-valid">
+                                        <!-- ngRepeat: s in outgoingSMTP -->
+                                        <option value="">Use custom settings</option>
+                                    </select>
+                                </div>
+                                <!-- ngIf: selectedOutgoingSMTP == '' -->
+                                <div ng-if="selectedOutgoingSMTP == ''" class="ng-scope">
+                                    <div class="form-group">
+                                        <div class="checkbox">
+                                            <label for="release-message-save">
+                                                <input ng-model="saveSMTPServer" type="checkbox"
+                                                       id="release-message-save"
+                                                       class="ng-pristine ng-untouched ng-valid">
+                                                Save these settings
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <!-- ngIf: saveSMTPServer -->
+                                </div><!-- end ngIf: selectedOutgoingSMTP == '' -->
+                                <div class="form-group">
+                                    <label for="release-message-email">Email address</label>
+                                    <input type="email" autofocus="" class="form-control" id="release-message-email"
+                                           placeholder="someone@example.com">
+                                </div>
+                                <!-- ngIf: selectedOutgoingSMTP == '' -->
+                                <div ng-if="selectedOutgoingSMTP == ''" class="ng-scope">
+                                    <div class="form-group">
+                                        <label for="release-message-smtp-host">SMTP server</label>
+                                        <input type="text" class="form-control" id="release-message-smtp-host"
+                                               placeholder="mail.example.com">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="release-message-smtp-port">SMTP port</label>
+                                        <input type="number" class="form-control" id="release-message-smtp-port"
+                                               value="25">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="release-message-smtp-username">Authentication</label>
+                                        <select ng-model="smtpmech" id="release-message-smtp-mechanism"
+                                                class="form-control ng-pristine ng-untouched ng-valid">
+                                            <option selected="" value="NONE">None</option>
+                                            <option value="PLAIN">PLAIN</option>
+                                            <option value="CRAMMD5">CRAM-MD5</option>
+                                        </select>
+                                    </div>
+                                    <!-- ngIf: smtpmech != 'NONE' -->
+                                    <!-- ngIf: smtpmech != 'NONE' -->
+                                </div><!-- end ngIf: selectedOutgoingSMTP == '' -->
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-danger" ng-click="confirmReleaseMessage()">Release
+                                message
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<script src="js/jquery-1.11.0.min.js"></script>
+<script src="js/jquery-ui-1.10.4.min.js"></script>
+<script src="js/bootstrap-3.3.2.min.js"></script>
+<script src="js/angular-1.3.8.js"></script>
+<script src="js/moment-2.8.4.js"></script>
+<script src="js/filesize-3.1.2.min.js"></script>
+<script src="js/strutil.js"></script>
+<script src="js/controllers.js"></script>
+<script>
+    function endsWith(str, suffix) {
+        return str.indexOf(suffix, str.length - suffix.length) !== -1;
+    }
+
+    var apiHost = "";
+    if (apiHost.length > 0 && !endsWith(apiHost, "/")) {
+        apiHost += "/";
+    }
+
+    var columns = [15, 15, 40, 20, 10];
+</script>
+
+
+</body>
+</html>

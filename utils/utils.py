@@ -10,7 +10,7 @@ def remove_accents_from_str(s: str):
         r"([^n\u0300-\u036f]|n(?!\u0303(?![\u0300-\u036f])))[\u0300-\u036f]+", r"\1",
         normalize( "NFD", s), 0, re.I
     )
-    return normalize( 'NFC', res)
+    return normalize('NFC', res)
 
 
 def parse_date(date_string: str):
@@ -25,7 +25,7 @@ def parse_date(date_string: str):
             'Domingo': 'Sunday'
         }
 
-        day, date_time = date_string.split(' ', 1)
+        day, date_time = date_string.strip().split(' ', 1)
         day = remove_accents_from_str(day).replace('\t', '').replace('\n', '')
         date_str, time_str = date_time.split(', ')
         hour, minute = time_str.replace('hs', '').split(':')
@@ -47,7 +47,7 @@ def parse_date(date_string: str):
         return combined_datetime
 
     except ValueError as e:
-        print(f"Error parsing date: {e}", date_string)
+        print(f"Error parsing date {date_string}: {e}")
         return None
 
 

@@ -12,9 +12,9 @@ class EventScraper(Scraper):
         super().__init__()
 
     def get_html(self):
-        # response = get(MUSICA_A_CIEGAS_URL)
+        # response = get(f"{MUSICA_A_CIEGAS_URL}/lugar/{self.place_id}")
         # return response.text
-        with open('../all_events.html', 'r') as file:
+        with open('../mocks/all_events.html', 'r') as file:
             return file.read()
 
     def __get_events(self, html: str):

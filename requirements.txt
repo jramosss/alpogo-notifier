@@ -2,3 +2,8 @@ requests~=2.32.3
 beautifulsoup4~=4.13.3
 python-dotenv
 selenium
+
+# testing
+pytest
+pytest-mock
+pytest-sugar

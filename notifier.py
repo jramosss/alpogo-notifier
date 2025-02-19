@@ -26,7 +26,7 @@ def send_email(events: list[Event]):
     msg['Content-Type'] = 'text/html'
     html = generate_html_for_events(events)
     msg.attach(MIMEText(html, 'html'))
-    with open('generated.html', 'w') as file:
+    with open('mocks/generated.html', 'w') as file:
         file.write(html)
 
     with smtplib.SMTP(smtp_server, smtp_port) as server:
