@@ -10,3 +10,4 @@ uvicorn
 pytest
 pytest-mock
 pytest-sugar
+pytest-cov
