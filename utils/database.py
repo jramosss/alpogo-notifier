@@ -1,10 +1,7 @@
+import os
 from peewee import SqliteDatabase
 
-
-db = SqliteDatabase('test.db')
-
+db = SqliteDatabase(os.getenv("DB_NAME"))
 
 def setup_database():
     db.connect()
-    yield db
-    db.close()

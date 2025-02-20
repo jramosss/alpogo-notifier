@@ -3,14 +3,17 @@ beautifulsoup4~=4.13.3
 python-dotenv~=1.0.1
 selenium~=4.28.1
 peewee~=3.17.9
-fastapi
+fastapi~=0.115.8
 uvicorn
-bcrypt
-pyjwt
-pydantic[email]
+bcrypt~=4.2.1
+pyjwt~=2.10.1
+pydantic[email]~=2.10.6
 
 # testing
-pytest
+pytest~=8.3.4
 pytest-mock
 pytest-sugar
 pytest-cov
+httpx
+mixer~=7.2.2
+pytest-dotenv

@@ -1,4 +1,11 @@
+from dotenv import load_dotenv
+import os
+
+env_file = ".env.development" if os.getenv("ENV") == "DEV" else ".env.test"
+load_dotenv(env_file)
+
 from fastapi import FastAPI
+
 from utils.database import setup_database, db
 from models.Place import Place
 from models.Event import Event
@@ -12,6 +19,7 @@ from fastapi_utilities import repeat_every
 
 from crons.scrape_places import cron as scrape_places_cron
 from fastapi.middleware.cors import CORSMiddleware
+
 
 app = FastAPI()
 

@@ -2,7 +2,7 @@ from scrapers.places_scraper import PlacesScraper
 from utils.database import db, setup_database
 from models.Place import Place
 
-setup_database()
+# setup_database("db.db")
 
 def cron():
     places = PlacesScraper().scrape()
