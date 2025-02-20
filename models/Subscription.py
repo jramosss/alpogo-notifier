@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from peewee import BooleanField, DateTimeField, ForeignKeyField
+from peewee import BooleanField, DateTimeField, ForeignKeyField, PrimaryKeyField
 
 from models.BaseModel import BaseModel
 from models.Place import Place
@@ -8,6 +8,7 @@ from models.User import User
 
 
 class Subscription(BaseModel):
+    id = PrimaryKeyField()
     user = ForeignKeyField(User, backref="subscriptions", on_delete="CASCADE")
     place = ForeignKeyField(Place, backref="subscriptions", on_delete="CASCADE")
     created_at = DateTimeField(default=datetime.now)

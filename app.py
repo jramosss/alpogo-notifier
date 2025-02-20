@@ -6,17 +6,28 @@ from models.User import User
 from models.Subscription import Subscription
 
 from routers.subscription import router as subscription_router
+from routers.user import router as user_router
 
 from fastapi_utilities import repeat_every
 
 from crons.scrape_places import cron as scrape_places_cron
-
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Change this in production!
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 setup_database()
 db.create_tables([Place, Event, User, Subscription])
 
 app.include_router(subscription_router, prefix="/subscription", tags=["Subscriptions"])
+app.include_router(user_router, prefix="/user", tags=["Users"])
 
 @app.get("/")
 def read_root():

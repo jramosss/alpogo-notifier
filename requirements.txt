@@ -5,6 +5,9 @@ selenium~=4.28.1
 peewee~=3.17.9
 fastapi
 uvicorn
+bcrypt
+pyjwt
+pydantic[email]
 
 # testing
 pytest

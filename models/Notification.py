@@ -1,13 +1,13 @@
 from datetime import datetime
 
-from peewee import CharField, ForeignKeyField, DateTimeField
+from peewee import CharField, ForeignKeyField, DateTimeField, PrimaryKeyField
 
 from models.BaseModel import BaseModel
 from models.User import User
 
 
 class Notification(BaseModel):
-    id = CharField(primary_key=True)
+    id = PrimaryKeyField()
     user = ForeignKeyField(User, backref='notifications')
     created_at = DateTimeField(default=datetime.now())
 
