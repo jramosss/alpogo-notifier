@@ -6,7 +6,6 @@ setup_database()
 
 def cron():
     places = PlacesScraper().scrape()
-    print(places)
     with db.atomic():
         Place.bulk_create(places)
 
