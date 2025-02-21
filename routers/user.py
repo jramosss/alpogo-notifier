@@ -8,6 +8,7 @@ router = APIRouter()
 
 class UserModel(BaseModel):
     email: EmailStr = Field(default=None)
+    # todo add validations for password like min length
     password: str
 
 @router.post("/register/")

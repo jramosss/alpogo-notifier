@@ -14,5 +14,11 @@ class Subscription(BaseModel):
     created_at = DateTimeField(default=datetime.now)
     is_active = BooleanField(default=True)
 
+    class Meta:
+        indexes = (
+            (("user", "place"), True),
+        )
+
+
     def __str__(self):
         return f"{self.user.id} - {self.event_id}"
