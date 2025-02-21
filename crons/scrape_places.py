@@ -1,5 +1,6 @@
 from concurrent.futures.thread import ThreadPoolExecutor
 
+from fastapi_utilities import repeat_every
 from peewee import IntegrityError
 
 from scrapers.places_scraper import PlacesScraper
@@ -9,6 +10,7 @@ from models.Place import Place
 setup_database()
 db.create_tables([Place])
 
+@repeat_every(seconds=86400)
 def create_or_update_image(place: Place):
     try:
         Place.create(

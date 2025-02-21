@@ -3,7 +3,9 @@ from bs4.element import Tag
 
 from models.Event import Event
 from scrapers.Scraper import Scraper
+from utils.constants import ALPOGO_URL
 from utils.utils import parse_date
+import requests
 
 
 class EventScraper(Scraper):
@@ -12,10 +14,8 @@ class EventScraper(Scraper):
         super().__init__()
 
     def get_html(self):
-        # response = get(f"{MUSICA_A_CIEGAS_URL}/lugar/{self.place_id}")
-        # return response.text
-        with open('../mocks/all_events.html', 'r') as file:
-            return file.read()
+        response = requests.get(f"{ALPOGO_URL}/lugar/{self.place_id}")
+        return response.text
 
     def __get_events(self, html: str):
         soup = BeautifulSoup(html, 'html.parser')
@@ -37,7 +37,10 @@ class EventScraper(Scraper):
         buttons = event.find('div', class_='botones')
         button = buttons.find('a', class_='btn')
         still_places_left = 'btn-agotado' not in button['class']
-        price = button.text.split('$')[1].split(' ')[0] if still_places_left else 0
+        if button.text.lower() == "obtener":
+            price = 0
+        else:
+            price = button.text.split('$')[1].split(' ')[0] if still_places_left else 0
 
         return Event(
             name=raw_name,

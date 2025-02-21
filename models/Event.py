@@ -1,9 +1,12 @@
-from peewee import CharField, DateField, FloatField, BooleanField
+from datetime import datetime
+
+from peewee import CharField, DateField, FloatField, BooleanField, DateTimeField, PrimaryKeyField
 
 from models.BaseModel import BaseModel
 
 
 class Event(BaseModel):
+    id = PrimaryKeyField()
     name = CharField()
     date = DateField()
     location = CharField()
@@ -11,6 +14,12 @@ class Event(BaseModel):
     stillPlacesLeft = BooleanField()
     url = CharField()
     image_url = CharField(max_length=1024)
+    created_at = DateTimeField(default=datetime.now())
+
+    class Meta:
+        indexes = (
+            (('name', 'date'), True),
+        )
 
     def to_html(self):
         return f"""
