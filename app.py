@@ -14,6 +14,7 @@ from models.Subscription import Subscription
 
 from routers.subscription import router as subscription_router
 from routers.user import router as user_router
+from routers.places import router as places_router
 
 from fastapi_utilities import repeat_every
 
@@ -36,6 +37,7 @@ db.create_tables([Place, Event, User, Subscription])
 
 app.include_router(subscription_router, prefix="/subscription", tags=["Subscriptions"])
 app.include_router(user_router, prefix="/user", tags=["Users"])
+app.include_router(places_router, prefix="/places", tags=["Places"])
 
 @app.get("/")
 def read_root():
