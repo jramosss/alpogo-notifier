@@ -17,12 +17,12 @@ RECIPIENTS = [
 smtp_server = '0.0.0.0'
 smtp_port = 1025
 
-def send_email(events: list[Event]):
+def send_email(to: list[str], events: list[Event]):
     msg = MIMEMultipart()
     msg['Subject'] = 'Eventos de musica a ciegas este mes'
     me = TEST_EMAIL
     msg['From'] = me
-    msg['To'] = ', '.join(RECIPIENTS)
+    msg['To'] = ', '.join(to)
     msg['Content-Type'] = 'text/html'
     html = generate_html_for_events(events)
     msg.attach(MIMEText(html, 'html'))
@@ -30,5 +30,5 @@ def send_email(events: list[Event]):
         file.write(html)
 
     with smtplib.SMTP(smtp_server, smtp_port) as server:
-        server.sendmail(me, RECIPIENTS, msg.as_string())
+        server.sendmail(me, to, msg.as_string())
         server.quit()

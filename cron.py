@@ -1,26 +1,19 @@
 from datetime import datetime
+
 from models.Event import Event
-from scrapers.event_scraper import EventScraper
+from models.Subscription import Subscription
 from notifier import send_email
-
-
-def filter_events(events: list[Event], date: datetime):
-    return [event for event in events if event.date >= date and event.stillPlacesLeft]
-
-
-def sort_events(events: list[Event]):
-    return sorted(events, key=lambda event: event.date)
 
 
 def notify():
     date = datetime.now()
-    events = EventScraper().scrape()
-    events_to_send = sort_events(filter_events(events, date))
-    if events_to_send:
-        send_email(events_to_send)
-    else:
-        print('No events to notify')
-
+    subscriptions = Subscription.select().where(Subscription.is_active).group_by(Subscription.user)
+    for subscription in subscriptions:
+        events = list(Event.select().where(Event.place == subscription.place, Event.date >= date, Event.stillPlacesLeft).order_by(Event.date).execute())
+        if events:
+            send_email([subscription.user.email], events)
+        else:
+            print(f"No events for {subscription.place.name}")
 
 if __name__ == '__main__':
     notify()

@@ -1,8 +1,9 @@
 from datetime import datetime
 
-from peewee import CharField, DateField, FloatField, BooleanField, DateTimeField, PrimaryKeyField
+from peewee import CharField, DateField, FloatField, BooleanField, DateTimeField, PrimaryKeyField, ForeignKeyField
 
 from models.BaseModel import BaseModel
+from models.Place import Place
 
 
 class Event(BaseModel):
@@ -13,6 +14,7 @@ class Event(BaseModel):
     price = FloatField()
     stillPlacesLeft = BooleanField()
     url = CharField()
+    place = ForeignKeyField(Place, backref='events')
     image_url = CharField(max_length=1024)
     created_at = DateTimeField(default=datetime.now())
 

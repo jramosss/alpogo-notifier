@@ -49,7 +49,8 @@ class EventScraper(Scraper):
             url=raw_url,
             stillPlacesLeft=still_places_left,
             price=float(price),
-            image_url=image_url
+            image_url=image_url,
+            place=self.place_id
         )
 
     def parse_events(self, events:  ResultSet[Tag]):
