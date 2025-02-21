@@ -9,7 +9,7 @@ client = TestClient(app)
 
 @pytest.fixture
 def place():
-    return mixer.blend(Place)
+    return mixer.blend(Place, image_url="https://example.com/image.jpg")
 
 @pytest.fixture
 def auth_token(test_user):
@@ -34,7 +34,7 @@ def test_get_subscriptions_after_subscribing(auth_token, place):
 
     response = client.get("/subscription/all", headers={"Authorization": f"Bearer {auth_token}"})
     assert response.status_code == 200
-    assert response.json() == {"subscriptions": [place.name]}
+    assert response.json() == {"subscriptions": [place.__dict__['__data__']]}
 
 def test_subscribe_to_nonexistent_place(auth_token):
     response = client.post("/subscription/999", headers={"Authorization": f"Bearer {auth_token}"})
