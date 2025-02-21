@@ -1,11 +1,16 @@
+from concurrent.futures.thread import ThreadPoolExecutor
 from time import sleep
 
+from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.remote.webelement import WebElement
 
 from scrapers.Scraper import Scraper
 from utils.constants import ALPOGO_URL
 from models.Place import Place
+import requests
+import toolz
 
 
 class PlacesScraper(Scraper):
@@ -25,32 +30,42 @@ class PlacesScraper(Scraper):
     def get_place_id_from_href(self, href: str):
         return int(href.split('/')[-1])
 
+    def get_place_image(self, place_url: str):
+        page = requests.get(place_url)
+        soup = BeautifulSoup(page.text, 'html.parser')
+        img_element = soup.find("img", class_="background-banda")
+        return img_element['src'] if img_element else ""
+
+    def create_place(self, place_element: WebElement):
+        try:
+            href = place_element.get_attribute('href')
+            return Place(
+                name=place_element.text,
+                url=href,
+                id=self.get_place_id_from_href(href),
+                image_url=self.get_place_image(href)
+            )
+        except Exception as e:
+            print(f"Error creating place {place_element}")
+            print(e)
+            return None
+
+    def create_places(self, places_elements: list[WebElement]):
+        with ThreadPoolExecutor(max_workers=6) as executor:
+            return list(executor.map(self.create_place, places_elements))
+
     def find_places(self):
         places_elements = self.driver.find_elements(by=By.CLASS_NAME, value="lugar-link")
-        places = []
-        place_names = set()
-        for place in places_elements:
-            if not place.text:
-                continue
-            if place.text in place_names:
-                continue
-            places.append(
-                Place(
-                    name=place.text,
-                    url=place.get_attribute('href'),
-                    id=self.get_place_id_from_href(place.get_attribute('href')),
-                    # TODO: enhance scraper to go into every place and extract image
-                    image_url=""
-                )
-            )
-            place_names.add(place.text)
-        return places
+        places_elements = [place for place in places_elements if place.text]
+        return list(toolz.unique(places_elements, key=lambda x: x.text))
 
     def scrape(self):
         self.driver.get(f"{ALPOGO_URL}")
         self.driver.implicitly_wait(self.time_to_wait)
         self.load_pages()
-        return self.find_places()
+        places_elements = self.find_places()
+        return self.create_places(places_elements)
+
 
     def setup(self):
         service = webdriver.ChromeService()
