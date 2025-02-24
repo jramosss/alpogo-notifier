@@ -15,10 +15,7 @@ class Subscription(BaseModel):
     is_active = BooleanField(default=True)
 
     class Meta:
-        indexes = (
-            (("user", "place"), True),
-        )
-
+        indexes = ((("user", "place"), True),)
 
     def __str__(self):
         return f"Subscription for user {self.user.id} {self.user.email} - {self.place.name}"

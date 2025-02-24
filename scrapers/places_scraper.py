@@ -16,7 +16,7 @@ import toolz
 class PlacesScraper(Scraper):
     driver: webdriver.Chrome | None
 
-    def __init__(self, pages_to_scrape = 3, time_to_wait = 0.5):
+    def __init__(self, pages_to_scrape=3, time_to_wait=0.5):
         self.driver = None
         self.pages_to_scrape = pages_to_scrape
         self.time_to_wait = time_to_wait
@@ -28,22 +28,22 @@ class PlacesScraper(Scraper):
             sleep(self.time_to_wait)
 
     def get_place_id_from_href(self, href: str):
-        return int(href.split('/')[-1])
+        return int(href.split("/")[-1])
 
     def get_place_image(self, place_url: str):
         page = requests.get(place_url)
-        soup = BeautifulSoup(page.text, 'html.parser')
+        soup = BeautifulSoup(page.text, "html.parser")
         img_element = soup.find("img", class_="background-banda")
-        return img_element['src'] if img_element else ""
+        return img_element["src"] if img_element else ""
 
     def create_place(self, place_element: WebElement):
         try:
-            href = place_element.get_attribute('href')
+            href = place_element.get_attribute("href")
             return Place(
                 name=place_element.text,
                 url=href,
                 id=self.get_place_id_from_href(href),
-                image_url=self.get_place_image(href)
+                image_url=self.get_place_image(href),
             )
         except Exception as e:
             print(f"Error creating place {place_element}")
@@ -55,7 +55,9 @@ class PlacesScraper(Scraper):
             return list(executor.map(self.create_place, places_elements))
 
     def find_places(self):
-        places_elements = self.driver.find_elements(by=By.CLASS_NAME, value="lugar-link")
+        places_elements = self.driver.find_elements(
+            by=By.CLASS_NAME, value="lugar-link"
+        )
         places_elements = [place for place in places_elements if place.text]
         return list(toolz.unique(places_elements, key=lambda x: x.text))
 
@@ -65,7 +67,6 @@ class PlacesScraper(Scraper):
         self.load_pages()
         places_elements = self.find_places()
         return self.create_places(places_elements)
-
 
     def setup(self):
         service = webdriver.ChromeService()

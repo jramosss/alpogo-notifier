@@ -23,16 +23,13 @@ def scrape_events_from_place(place: Place):
         print_tb(e.__traceback__)
         return []
 
+
 # @repeat_every(seconds=86400)
 def cron():
     places_query = Place.select(Place.id).where(Place.url.is_null(False))
     places = list(places_query.execute())
     with ThreadPoolExecutor(max_workers=10) as executor:
-        events = list(
-            executor.map(
-                scrape_events_from_place, places
-            )
-        )
+        events = list(executor.map(scrape_events_from_place, places))
 
     events = [event for place_events in events for event in place_events]
 

@@ -7,41 +7,44 @@ from models.Event import Event
 
 def remove_accents_from_str(s: str):
     res = re.sub(
-        r"([^n\u0300-\u036f]|n(?!\u0303(?![\u0300-\u036f])))[\u0300-\u036f]+", r"\1",
-        normalize( "NFD", s), 0, re.I
+        r"([^n\u0300-\u036f]|n(?!\u0303(?![\u0300-\u036f])))[\u0300-\u036f]+",
+        r"\1",
+        normalize("NFD", s),
+        0,
+        re.I,
     )
-    return normalize('NFC', res)
+    return normalize("NFC", res)
 
 
 def parse_date(date_string: str):
     try:
         day_mapping = {
-            'Lunes': 'Monday',
-            'Martes': 'Tuesday',
-            'Miercoles': 'Wednesday',
-            'Jueves': 'Thursday',
-            'Viernes': 'Friday',
-            'Sabado': 'Saturday',
-            'Domingo': 'Sunday'
+            "Lunes": "Monday",
+            "Martes": "Tuesday",
+            "Miercoles": "Wednesday",
+            "Jueves": "Thursday",
+            "Viernes": "Friday",
+            "Sabado": "Saturday",
+            "Domingo": "Sunday",
         }
 
-        day, date_time = date_string.strip().split(' ', 1)
-        day = remove_accents_from_str(day).replace('\t', '').replace('\n', '')
-        date_str, time_str = date_time.split(', ')
-        hour, minute = time_str.replace('hs', '').split(':')
+        day, date_time = date_string.strip().split(" ", 1)
+        day = remove_accents_from_str(day).replace("\t", "").replace("\n", "")
+        date_str, time_str = date_time.split(", ")
+        hour, minute = time_str.replace("hs", "").split(":")
 
         day_en = day_mapping.get(day)
         if not day_en:
             raise ValueError(f"Invalid day name: {day}")
 
-        date_object = datetime.datetime.strptime(date_str, '%d/%m')
+        date_object = datetime.datetime.strptime(date_str, "%d/%m")
 
         combined_datetime = datetime.datetime(
             datetime.datetime.now().year,
             date_object.month,
             date_object.day,
             int(hour),
-            int(minute)
+            int(minute),
         )
 
         return combined_datetime

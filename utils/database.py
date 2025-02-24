@@ -7,5 +7,6 @@ if not DB_NAME:
 
 db = SqliteDatabase(DB_NAME)
 
+
 def setup_database():
     pass

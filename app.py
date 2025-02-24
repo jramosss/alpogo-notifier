@@ -42,9 +42,11 @@ app.include_router(subscription_router, prefix="/subscription", tags=["Subscript
 app.include_router(user_router, prefix="/user", tags=["Users"])
 app.include_router(places_router, prefix="/places", tags=["Places"])
 
+
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
+
 
 @repeat_every(seconds=86400)
 def run_cron():

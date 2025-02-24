@@ -14,10 +14,12 @@ TOKEN_EXPIRATION_MINUTES = 300
 
 security = HTTPBearer()
 
+
 def create_access_token(user: User) -> str:
     payload = {
         "sub": user.email,
-        "exp": datetime.datetime.now(datetime.UTC) + datetime.timedelta(minutes=TOKEN_EXPIRATION_MINUTES)
+        "exp": datetime.datetime.now(datetime.UTC)
+        + datetime.timedelta(minutes=TOKEN_EXPIRATION_MINUTES),
     }
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 

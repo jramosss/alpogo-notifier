@@ -20,6 +20,7 @@ def setup():
     yield
     system("rm -rf test.db")
 
+
 @pytest.fixture
 def test_user():
     email = "test@example.com"
@@ -30,10 +31,12 @@ def test_user():
         u.delete_instance()
     return User.create_user(email=email, password="hashedpassword")
 
+
 @pytest.fixture
 def test_place():
     """Creates and returns a test place."""
     return mixer.blend(Place)
+
 
 @pytest.fixture
 def auth_token(test_user):

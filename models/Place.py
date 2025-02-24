@@ -10,4 +10,4 @@ class Place(BaseModel):
     image_url = CharField(max_length=1024, null=True)
 
     def __str__(self):
-        return f'{self.name}'
+        return f"{self.name}"
