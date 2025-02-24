@@ -1,276 +1,367 @@
-<!DOCTYPE html>
-<html>
-<head>
+
+    <!DOCTYPE html>
+    <html>
+    <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <title>Event List</title>
     <style>
-        .event-container {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            padding: 20px;
-            width: 300px; /* Adjust as needed */
-            margin: 20px;
-            font-family: sans-serif;
-            display: inline-block; /* Display events horizontally */
-            vertical-align: top; /* Align events to the top */
-        }
+    .event-container {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        width: 300px; /* Adjust as needed */
+        margin: 20px;
+        font-family: sans-serif;
+        display: inline-block; /* Display events horizontally */
+        vertical-align: top; /* Align events to the top */
+    }
 
-        .event-title {
-            font-size: 1.2em;
-            font-weight: bold;
-            margin-bottom: 10px;
-            height: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+    .event-title {
+        font-size: 1.2em;
+        font-weight: bold;
+        margin-bottom: 10px;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
-        .event-detail {
-            margin-bottom: 5px;
-        }
+    .event-detail {
+        margin-bottom: 5px;
+    }
 
-        .available {
-            color: green;
-            font-weight: bold;
-        }
+    .available {
+        color: green;
+        font-weight: bold;
+    }
 
-        .unavailable {
-            color: red;
-            font-weight: bold;
-        }
+    .unavailable {
+        color: red;
+        font-weight: bold;
+    }
 
-        .event-link {
-            display: block;
-            margin-top: 10px;
-            padding: 8px 12px;
-            background-color: #4CAF50;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            text-align: center;
-        }
+    .event-link {
+        display: block;
+        margin-top: 10px;
+        padding: 8px 12px;
+        background-color: #4CAF50;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        text-align: center;
+    }
 
-        .event-link:hover {
-            background-color: #367C39;
-        }
+    .event-link:hover {
+        background-color: #367C39;
+    }
 
-        .event-list-container {
-            text-align: center; /* Center the events horizontally */
-        }
+    .event-list-container {
+        text-align: center; /* Center the events horizontally */
+    }
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+    }
+    
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 300px;
+      background-color: gray;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 10px;
 
-        .tooltip {
-            position: relative;
-            display: inline-block;
-            border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
-        }
+      /* Position the tooltip text - see examples below! */
+      position: absolute;
+      z-index: 1;
+    }
 
-        .tooltip .tooltiptext {
-            visibility: hidden;
-            width: 300px;
-            background-color: gray;
-            color: #fff;
-            text-align: center;
-            border-radius: 6px;
-            padding: 10px;
+    .tooltip .tooltiptext {
+      width: 120px;
+      top: 50%;
+      left: 50%;
+      margin-left: -60px; /* Use half of the width (120/2 = 60), to center the tooltip */
+    }
 
-            /* Position the tooltip text - see examples below! */
-            position: absolute;
-            z-index: 1;
-        }
-
-        .tooltip .tooltiptext {
-            width: 120px;
-            top: 50%;
-            left: 50%;
-            margin-left: -60px; /* Use half of the width (120/2 = 60), to center the tooltip */
-        }
-
-        /* Show the tooltip text when you mouse over the tooltip container */
-        .tooltip:hover .tooltiptext {
-            visibility: visible;
-        }
+    /* Show the tooltip text when you mouse over the tooltip container */
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+    }
     </style>
-</head>
-<body>
-<div class="event-list-container">
-
-    <div class="event-container">
-        <div class="event-title tooltip">
-            Marina Fages en Liverpool
-            <span class="tooltiptext">Marina Fages en Liverpool</span>
+    </head>
+    <body>
+    <div class="event-list-container">
+    
+        <div class="event-container">
+            <div class="event-title tooltip">
+                Ruffo y Ruocco en Cordoba
+                <span class="tooltiptext">Ruffo y Ruocco en Cordoba</span>
+            </div>
+            <img src="https://imagenes.alpogo.com/eventos/rufforoucajda.jpg" alt="Ruffo y Ruocco en Cordoba" style="width: 300px; height: 300px; border-radius: 8px;">
+            <div class="event-detail"><strong>Date:</strong> February 21, 2025, 00:00</div>
+            <div class="event-detail"><strong>Location:</strong> Studio Theater, Córdoba</div>
+            <div class="event-detail"><strong>Price:</strong> $18000</div>
+            <a href="https://alpogo.com/evento/ruffo-y-ruocco-en-cordoba-18340" class="event-link">
+                View Event
+            </a>
         </div>
-        <img src="https://imagenes.alpogo.com/eventos/alta_evento_1734038997_675b55d50ff5d.jpg"
-             alt="Marina Fages en Liverpool" style="width: 300px; height: 300px; border-radius: 8px;">
-        <div class="event-detail"><strong>Date:</strong> February 22, 2025, 20:00</div>
-        <div class="event-detail"><strong>Location:</strong> Liverpool Club, Palermo</div>
-        <div class="event-detail"><strong>Price:</strong> $10000</div>
-        <a href="https://alpogo.com/evento/marina-fages-en-liverpool-18035" class="event-link">
-            View Event
-        </a>
-    </div>
-
-    <div class="event-container">
-        <div class="event-title tooltip">
-            Sakatumba en Liverpool
-            <span class="tooltiptext">Sakatumba en Liverpool</span>
+        
+        <div class="event-container">
+            <div class="event-title tooltip">
+                Fiesta De Musica Ligera
+                <span class="tooltiptext">Fiesta De Musica Ligera</span>
+            </div>
+            <img src="https://imagenes.alpogo.com/eventos/alta_evento_1738933562_67a6053a47efd.jpg" alt="Fiesta De Musica Ligera" style="width: 300px; height: 300px; border-radius: 8px;">
+            <div class="event-detail"><strong>Date:</strong> February 21, 2025, 00:00</div>
+            <div class="event-detail"><strong>Location:</strong> Studio Theater, Córdoba</div>
+            <div class="event-detail"><strong>Price:</strong> $5100</div>
+            <a href="https://alpogo.com/evento/fiesta-de-musica-ligera-18627" class="event-link">
+                View Event
+            </a>
         </div>
-        <img src="https://imagenes.alpogo.com/eventos/alta_evento_1737753477_679403851270f.jpg"
-             alt="Sakatumba en Liverpool" style="width: 300px; height: 300px; border-radius: 8px;">
-        <div class="event-detail"><strong>Date:</strong> February 28, 2025, 20:00</div>
-        <div class="event-detail"><strong>Location:</strong> Liverpool Club, Palermo</div>
-        <div class="event-detail"><strong>Price:</strong> $6500</div>
-        <a href="https://alpogo.com/evento/sakatumba-en-liverpool-18462" class="event-link">
-            View Event
-        </a>
-    </div>
-
-    <div class="event-container">
-        <div class="event-title tooltip">
-            INTERZINE PRESENTA A CANDELABRO EN LIVERPOOL
-            <span class="tooltiptext">INTERZINE PRESENTA A CANDELABRO EN LIVERPOOL</span>
+        
+        <div class="event-container">
+            <div class="event-title tooltip">
+                Fiesta De Musica Ligera - FREE
+                <span class="tooltiptext">Fiesta De Musica Ligera - FREE</span>
+            </div>
+            <img src="https://imagenes.alpogo.com/eventos/alta_evento_1738933562_67a6053a47efd.jpg" alt="Fiesta De Musica Ligera - FREE" style="width: 300px; height: 300px; border-radius: 8px;">
+            <div class="event-detail"><strong>Date:</strong> February 21, 2025, 00:00</div>
+            <div class="event-detail"><strong>Location:</strong> Studio Theater, Córdoba</div>
+            <div class="event-detail"><strong>Price:</strong> $0</div>
+            <a href="https://alpogo.com/evento/fiesta-de-musica-ligera-free-18648" class="event-link">
+                View Event
+            </a>
         </div>
-        <img src="https://imagenes.alpogo.com/eventos/alta_evento_1734030360_675b34189e974.jpg"
-             alt="INTERZINE PRESENTA A CANDELABRO EN LIVERPOOL"
-             style="width: 300px; height: 300px; border-radius: 8px;">
-        <div class="event-detail"><strong>Date:</strong> March 01, 2025, 20:00</div>
-        <div class="event-detail"><strong>Location:</strong> Liverpool Club, Palermo</div>
-        <div class="event-detail"><strong>Price:</strong> $7000</div>
-        <a href="https://alpogo.com/evento/interzine-presenta-a-candelabro-en-liverpool-18032" class="event-link">
-            View Event
-        </a>
-    </div>
-
-    <div class="event-container">
-        <div class="event-title tooltip">
-            Mauro Valenti y banda + La Perla Irregular + El Presiden...
-            <span class="tooltiptext">Mauro Valenti  y banda + La Perla Irregular + El Presidente en Liverpool</span>
+        
+        <div class="event-container">
+            <div class="event-title tooltip">
+                Club Reggaeton
+                <span class="tooltiptext">Club Reggaeton</span>
+            </div>
+            <img src="https://imagenes.alpogo.com/eventos/reggaetonton.png" alt="Club Reggaeton" style="width: 300px; height: 300px; border-radius: 8px;">
+            <div class="event-detail"><strong>Date:</strong> February 22, 2025, 00:00</div>
+            <div class="event-detail"><strong>Location:</strong> Studio Theater, Córdoba</div>
+            <div class="event-detail"><strong>Price:</strong> $5000</div>
+            <a href="https://alpogo.com/evento/club-reggaeton-18752" class="event-link">
+                View Event
+            </a>
         </div>
-        <img src="https://imagenes.alpogo.com/eventos/Laperlaliverppp.jpg"
-             alt="Mauro Valenti  y banda + La Perla Irregular + El Presidente en Liverpool"
-             style="width: 300px; height: 300px; border-radius: 8px;">
-        <div class="event-detail"><strong>Date:</strong> March 07, 2025, 20:30</div>
-        <div class="event-detail"><strong>Location:</strong> Liverpool Club, Palermo</div>
-        <div class="event-detail"><strong>Price:</strong> $5000</div>
-        <a href="https://alpogo.com/evento/mauro-valenti-y-banda-la-perla-irregular-el-presidente-en-liverpool-18705"
-           class="event-link">
-            View Event
-        </a>
-    </div>
-
-    <div class="event-container">
-        <div class="event-title tooltip">
-            Piba - Carolo - Fletes Rakel en Liverpool
-            <span class="tooltiptext">Piba - Carolo - Fletes Rakel en Liverpool</span>
+        
+        <div class="event-container">
+            <div class="event-title tooltip">
+                Limbo Pop Baile Funk
+                <span class="tooltiptext">Limbo Pop Baile Funk</span>
+            </div>
+            <img src="https://imagenes.alpogo.com/eventos/limbofunkkk.jpg" alt="Limbo Pop Baile Funk" style="width: 300px; height: 300px; border-radius: 8px;">
+            <div class="event-detail"><strong>Date:</strong> February 28, 2025, 00:00</div>
+            <div class="event-detail"><strong>Location:</strong> Studio Theater, Córdoba</div>
+            <div class="event-detail"><strong>Price:</strong> $7000</div>
+            <a href="https://alpogo.com/evento/limbo-pop-baile-funk-18742" class="event-link">
+                View Event
+            </a>
         </div>
-        <img src="https://imagenes.alpogo.com/eventos/fletero.png" alt="Piba - Carolo - Fletes Rakel en Liverpool"
-             style="width: 300px; height: 300px; border-radius: 8px;">
-        <div class="event-detail"><strong>Date:</strong> March 08, 2025, 20:00</div>
-        <div class="event-detail"><strong>Location:</strong> Liverpool Club, Palermo</div>
-        <div class="event-detail"><strong>Price:</strong> $5000</div>
-        <a href="https://alpogo.com/evento/piba-carolo-fletes-rakel-en-liverpool-18668" class="event-link">
-            View Event
-        </a>
-    </div>
-
-    <div class="event-container">
-        <div class="event-title tooltip">
-            Komo Yamarte - Ostra Damus y Porteros Eléctricos en Liver...
-            <span class="tooltiptext">Komo Yamarte - Ostra Damus y Porteros Eléctricos en Liverpool</span>
+        
+        <div class="event-container">
+            <div class="event-title tooltip">
+                Limbo Pop Baile Funk - Link FREE
+                <span class="tooltiptext">Limbo Pop Baile Funk - Link FREE</span>
+            </div>
+            <img src="https://imagenes.alpogo.com/eventos/funkss.jpg" alt="Limbo Pop Baile Funk - Link FREE" style="width: 300px; height: 300px; border-radius: 8px;">
+            <div class="event-detail"><strong>Date:</strong> February 28, 2025, 00:00</div>
+            <div class="event-detail"><strong>Location:</strong> Studio Theater, Córdoba</div>
+            <div class="event-detail"><strong>Price:</strong> $0</div>
+            <a href="https://alpogo.com/evento/limbo-pop-baile-funk-link-free-18743" class="event-link">
+                View Event
+            </a>
         </div>
-        <img src="https://imagenes.alpogo.com/eventos/Liverpoolnd.JPG"
-             alt="Komo Yamarte - Ostra Damus y Porteros Eléctricos en Liverpool"
-             style="width: 300px; height: 300px; border-radius: 8px;">
-        <div class="event-detail"><strong>Date:</strong> March 13, 2025, 21:00</div>
-        <div class="event-detail"><strong>Location:</strong> Liverpool Club, Palermo</div>
-        <div class="event-detail"><strong>Price:</strong> $5000</div>
-        <a href="https://alpogo.com/evento/komo-yamarte-ostra-damus-y-porteros-electricos-en-liverpool-18550"
-           class="event-link">
-            View Event
-        </a>
-    </div>
-
-    <div class="event-container">
-        <div class="event-title tooltip">
-            Paula Maffia & y Las Malas Lenguas
-            <span class="tooltiptext">Paula Maffia & y Las Malas Lenguas</span>
+        
+        <div class="event-container">
+            <div class="event-title tooltip">
+                Fiesta Generacion X
+                <span class="tooltiptext">Fiesta Generacion X</span>
+            </div>
+            <img src="https://imagenes.alpogo.com/eventos/generacionx.jpg" alt="Fiesta Generacion X" style="width: 300px; height: 300px; border-radius: 8px;">
+            <div class="event-detail"><strong>Date:</strong> March 01, 2025, 00:00</div>
+            <div class="event-detail"><strong>Location:</strong> Studio Theater, Córdoba</div>
+            <div class="event-detail"><strong>Price:</strong> $5950</div>
+            <a href="https://alpogo.com/evento/fiesta-generacion-x-18588" class="event-link">
+                View Event
+            </a>
         </div>
-        <img src="https://imagenes.alpogo.com/eventos/alta_evento_1739279285_67ab4bb54989e.jpg"
-             alt="Paula Maffia & y Las Malas Lenguas" style="width: 300px; height: 300px; border-radius: 8px;">
-        <div class="event-detail"><strong>Date:</strong> March 15, 2025, 20:00</div>
-        <div class="event-detail"><strong>Location:</strong> Liverpool Club, Palermo</div>
-        <div class="event-detail"><strong>Price:</strong> $12000</div>
-        <a href="https://alpogo.com/evento/paula-maffia-y-las-malas-lenguas-18685" class="event-link">
-            View Event
-        </a>
-    </div>
-
-    <div class="event-container">
-        <div class="event-title tooltip">
-            Daniel Melero + Farmacia + Surmenage en Liverpool
-            <span class="tooltiptext">Daniel Melero + Farmacia + Surmenage en Liverpool</span>
+        
+        <div class="event-container">
+            <div class="event-title tooltip">
+                Fiesta Generacion X -  FREE
+                <span class="tooltiptext">Fiesta Generacion X -  FREE</span>
+            </div>
+            <img src="https://imagenes.alpogo.com/eventos/generacionx.jpg" alt="Fiesta Generacion X -  FREE" style="width: 300px; height: 300px; border-radius: 8px;">
+            <div class="event-detail"><strong>Date:</strong> March 01, 2025, 00:00</div>
+            <div class="event-detail"><strong>Location:</strong> Studio Theater, Córdoba</div>
+            <div class="event-detail"><strong>Price:</strong> $0</div>
+            <a href="https://alpogo.com/evento/fiesta-generacion-x-free-18589" class="event-link">
+                View Event
+            </a>
         </div>
-        <img src="https://imagenes.alpogo.com/eventos/Liverbverbver.jpg"
-             alt="Daniel Melero + Farmacia + Surmenage en Liverpool"
-             style="width: 300px; height: 300px; border-radius: 8px;">
-        <div class="event-detail"><strong>Date:</strong> March 16, 2025, 20:00</div>
-        <div class="event-detail"><strong>Location:</strong> Liverpool Club, Palermo</div>
-        <div class="event-detail"><strong>Price:</strong> $13000</div>
-        <a href="https://alpogo.com/evento/daniel-melero-farmacia-surmenage-en-liverpool-18857" class="event-link">
-            View Event
-        </a>
-    </div>
-
-    <div class="event-container">
-        <div class="event-title tooltip">
-            Rock y Pasion en Liverpool
-            <span class="tooltiptext">Rock y Pasion en Liverpool</span>
+        
+        <div class="event-container">
+            <div class="event-title tooltip">
+                Festival Bandas Tributo - Matine en Studio Theater 02/03
+                <span class="tooltiptext">Festival Bandas Tributo - Matine en Studio Theater 02/03</span>
+            </div>
+            <img src="https://imagenes.alpogo.com/eventos/alta_evento_1738412707_679e12a37476f.jpg" alt="Festival Bandas Tributo - Matine en Studio Theater 02/03" style="width: 300px; height: 300px; border-radius: 8px;">
+            <div class="event-detail"><strong>Date:</strong> March 02, 2025, 00:00</div>
+            <div class="event-detail"><strong>Location:</strong> Studio Theater, Córdoba</div>
+            <div class="event-detail"><strong>Price:</strong> $5950</div>
+            <a href="https://alpogo.com/evento/festival-bandas-tributo-matine-en-studio-theater-0203-18562" class="event-link">
+                View Event
+            </a>
         </div>
-        <img src="https://imagenes.alpogo.com/eventos/Rockyliverpimag.JPG" alt="Rock y Pasion en Liverpool"
-             style="width: 300px; height: 300px; border-radius: 8px;">
-        <div class="event-detail"><strong>Date:</strong> March 21, 2025, 20:00</div>
-        <div class="event-detail"><strong>Location:</strong> Liverpool Club, Palermo</div>
-        <div class="event-detail"><strong>Price:</strong> $5000</div>
-        <a href="https://alpogo.com/evento/rock-y-pasion-en-liverpool-18856" class="event-link">
-            View Event
-        </a>
-    </div>
-
-    <div class="event-container">
-        <div class="event-title tooltip">
-            Fiesta homenaje a Los Piojos y Los Redondos en Liverpool
-            <span class="tooltiptext">Fiesta homenaje a Los Piojos y Los Redondos en Liverpool</span>
+        
+        <div class="event-container">
+            <div class="event-title tooltip">
+                Pupina Plomer
+                <span class="tooltiptext">Pupina Plomer</span>
+            </div>
+            <img src="https://imagenes.alpogo.com/eventos/JEUVES13FS.jpg" alt="Pupina Plomer" style="width: 300px; height: 300px; border-radius: 8px;">
+            <div class="event-detail"><strong>Date:</strong> March 13, 2025, 00:00</div>
+            <div class="event-detail"><strong>Location:</strong> Studio Theater, Córdoba</div>
+            <div class="event-detail"><strong>Price:</strong> $14000</div>
+            <a href="https://alpogo.com/evento/pupina-plomer-18475" class="event-link">
+                View Event
+            </a>
         </div>
-        <img src="https://imagenes.alpogo.com/eventos/redondos.jpeg"
-             alt="Fiesta homenaje a Los Piojos y Los Redondos en Liverpool"
-             style="width: 300px; height: 300px; border-radius: 8px;">
-        <div class="event-detail"><strong>Date:</strong> March 22, 2025, 20:30</div>
-        <div class="event-detail"><strong>Location:</strong> Liverpool Club, Palermo</div>
-        <div class="event-detail"><strong>Price:</strong> $10000</div>
-        <a href="https://alpogo.com/evento/fiesta-homenaje-a-los-piojos-y-los-redondos-en-liverpool-18694"
-           class="event-link">
-            View Event
-        </a>
-    </div>
-
-    <div class="event-container">
-        <div class="event-title tooltip">
-            Presentacion de disco de Hijos de la sangre y Glassrows e...
-            <span class="tooltiptext">Presentacion de disco de Hijos de la sangre y Glassrows en Liverpool</span>
+        
+        <div class="event-container">
+            <div class="event-title tooltip">
+                Fly Fly Caroline - Rosa Profunda - Candy Flux en Studio T...
+                <span class="tooltiptext">Fly Fly Caroline - Rosa Profunda - Candy Flux en Studio Theater - 14/3</span>
+            </div>
+            <img src="https://imagenes.alpogo.com/eventos/alta_evento_1738352800_679d28a00be5a.jpg" alt="Fly Fly Caroline - Rosa Profunda - Candy Flux en Studio Theater - 14/3" style="width: 300px; height: 300px; border-radius: 8px;">
+            <div class="event-detail"><strong>Date:</strong> March 14, 2025, 00:00</div>
+            <div class="event-detail"><strong>Location:</strong> Studio Theater, Córdoba</div>
+            <div class="event-detail"><strong>Price:</strong> $10000</div>
+            <a href="https://alpogo.com/evento/fly-fly-caroline-rosa-profunda-candy-flux-en-studio-theater-143-18559" class="event-link">
+                View Event
+            </a>
         </div>
-        <img src="https://imagenes.alpogo.com/eventos/Glasliver.jpg"
-             alt="Presentacion de disco de Hijos de la sangre y Glassrows en Liverpool"
-             style="width: 300px; height: 300px; border-radius: 8px;">
-        <div class="event-detail"><strong>Date:</strong> May 02, 2025, 20:00</div>
-        <div class="event-detail"><strong>Location:</strong> Liverpool Club, Palermo</div>
-        <div class="event-detail"><strong>Price:</strong> $3000</div>
-        <a href="https://alpogo.com/evento/presentacion-de-disco-de-hijos-de-la-sangre-y-glassrows-en-liverpool-18673"
-           class="event-link">
-            View Event
-        </a>
+        
+        <div class="event-container">
+            <div class="event-title tooltip">
+                San Junipero
+                <span class="tooltiptext">San Junipero</span>
+            </div>
+            <img src="https://imagenes.alpogo.com/eventos/JUNIPERO.jpg" alt="San Junipero" style="width: 300px; height: 300px; border-radius: 8px;">
+            <div class="event-detail"><strong>Date:</strong> March 15, 2025, 00:00</div>
+            <div class="event-detail"><strong>Location:</strong> Studio Theater, Córdoba</div>
+            <div class="event-detail"><strong>Price:</strong> $5000</div>
+            <a href="https://alpogo.com/evento/san-junipero-18780" class="event-link">
+                View Event
+            </a>
+        </div>
+        
+        <div class="event-container">
+            <div class="event-title tooltip">
+                Las prohibidas del rock nacional
+                <span class="tooltiptext">Las prohibidas del rock nacional</span>
+            </div>
+            <img src="https://imagenes.alpogo.com/eventos/prohibidas.png" alt="Las prohibidas del rock nacional" style="width: 300px; height: 300px; border-radius: 8px;">
+            <div class="event-detail"><strong>Date:</strong> March 20, 2025, 00:00</div>
+            <div class="event-detail"><strong>Location:</strong> Studio Theater, Córdoba</div>
+            <div class="event-detail"><strong>Price:</strong> $8000</div>
+            <a href="https://alpogo.com/evento/las-prohibidas-del-rock-nacional-18754" class="event-link">
+                View Event
+            </a>
+        </div>
+        
+        <div class="event-container">
+            <div class="event-title tooltip">
+                00Diez Marzo Toxic en Studio
+                <span class="tooltiptext">00Diez Marzo Toxic en Studio</span>
+            </div>
+            <img src="https://imagenes.alpogo.com/eventos/alta_evento_1739389876_67acfbb47f66e.jpg" alt="00Diez Marzo Toxic en Studio" style="width: 300px; height: 300px; border-radius: 8px;">
+            <div class="event-detail"><strong>Date:</strong> March 22, 2025, 00:00</div>
+            <div class="event-detail"><strong>Location:</strong> Studio Theater, Córdoba</div>
+            <div class="event-detail"><strong>Price:</strong> $6000</div>
+            <a href="https://alpogo.com/evento/00diez-marzo-toxic-en-studio-18724" class="event-link">
+                View Event
+            </a>
+        </div>
+        
+        <div class="event-container">
+            <div class="event-title tooltip">
+                New Sensation tributo a INXS en Studio Theater - Jueves 3/4
+                <span class="tooltiptext">New Sensation tributo a INXS en Studio Theater - Jueves 3/4</span>
+            </div>
+            <img src="https://imagenes.alpogo.com/eventos/alta_evento_1737568521_67913109a491a.jpg" alt="New Sensation tributo a INXS en Studio Theater - Jueves 3/4" style="width: 300px; height: 300px; border-radius: 8px;">
+            <div class="event-detail"><strong>Date:</strong> April 03, 2025, 00:00</div>
+            <div class="event-detail"><strong>Location:</strong> Studio Theater, Córdoba</div>
+            <div class="event-detail"><strong>Price:</strong> $15000</div>
+            <a href="https://alpogo.com/evento/new-sensation-tributo-a-inxs-en-studio-theater-jueves-34-18438" class="event-link">
+                View Event
+            </a>
+        </div>
+        
+        <div class="event-container">
+            <div class="event-title tooltip">
+                Avicii Experience por Tecna Sonum
+                <span class="tooltiptext">Avicii Experience por Tecna Sonum</span>
+            </div>
+            <img src="https://imagenes.alpogo.com/eventos/alta_evento_1739983985_67b60c71359bf.jpg" alt="Avicii Experience por Tecna Sonum" style="width: 300px; height: 300px; border-radius: 8px;">
+            <div class="event-detail"><strong>Date:</strong> April 04, 2025, 00:00</div>
+            <div class="event-detail"><strong>Location:</strong> Studio Theater, Córdoba</div>
+            <div class="event-detail"><strong>Price:</strong> $15300</div>
+            <a href="https://alpogo.com/evento/avicii-experience-por-tecna-sonum-18851" class="event-link">
+                View Event
+            </a>
+        </div>
+        
+        <div class="event-container">
+            <div class="event-title tooltip">
+                Lucas Upstein en Studio Theater
+                <span class="tooltiptext">Lucas Upstein en Studio Theater</span>
+            </div>
+            <img src="https://imagenes.alpogo.com/eventos/aidocosutangel.jpg" alt="Lucas Upstein en Studio Theater" style="width: 300px; height: 300px; border-radius: 8px;">
+            <div class="event-detail"><strong>Date:</strong> April 05, 2025, 00:00</div>
+            <div class="event-detail"><strong>Location:</strong> Studio Theater, Córdoba</div>
+            <div class="event-detail"><strong>Price:</strong> $18000</div>
+            <a href="https://alpogo.com/evento/lucas-upstein-en-studio-theater-18272" class="event-link">
+                View Event
+            </a>
+        </div>
+        
+        <div class="event-container">
+            <div class="event-title tooltip">
+                Un Barco llamado Loperman - Charo Lopez y Adrian Lakerman
+                <span class="tooltiptext">Un Barco llamado Loperman - Charo Lopez y Adrian Lakerman</span>
+            </div>
+            <img src="https://imagenes.alpogo.com/eventos/barocllamdoloperman.jpg" alt="Un Barco llamado Loperman - Charo Lopez y Adrian Lakerman" style="width: 300px; height: 300px; border-radius: 8px;">
+            <div class="event-detail"><strong>Date:</strong> April 12, 2025, 00:00</div>
+            <div class="event-detail"><strong>Location:</strong> Studio Theater, Córdoba</div>
+            <div class="event-detail"><strong>Price:</strong> $16000</div>
+            <a href="https://alpogo.com/evento/un-barco-llamado-loperman-charo-lopez-y-adrian-lakerman-18325" class="event-link">
+                View Event
+            </a>
+        </div>
+        
+        <div class="event-container">
+            <div class="event-title tooltip">
+                Nicolas de Tracy en Studio Theater 7/8
+                <span class="tooltiptext">Nicolas de Tracy en Studio Theater 7/8</span>
+            </div>
+            <img src="https://imagenes.alpogo.com/eventos/CORINCOSLESF.jpg" alt="Nicolas de Tracy en Studio Theater 7/8" style="width: 300px; height: 300px; border-radius: 8px;">
+            <div class="event-detail"><strong>Date:</strong> August 07, 2025, 00:00</div>
+            <div class="event-detail"><strong>Location:</strong> Studio Theater, Córdoba</div>
+            <div class="event-detail"><strong>Price:</strong> $24000</div>
+            <a href="https://alpogo.com/evento/nicolas-de-tracy-en-studio-theater-78-18447" class="event-link">
+                View Event
+            </a>
+        </div>
+        
     </div>
-
-</div>
-</body>
-</html>
+    </body>
+    </html>
     

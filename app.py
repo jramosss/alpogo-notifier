@@ -1,6 +1,9 @@
 from dotenv import load_dotenv
 import os
 
+from models.Notification import Notification
+from models.NotificationEvent import NotificationEvent
+
 env_file = ".env.development" if os.getenv("ENV") == "DEV" else ".env.test"
 load_dotenv(env_file)
 
@@ -33,7 +36,7 @@ app.add_middleware(
 )
 
 setup_database()
-db.create_tables([Place, Event, User, Subscription])
+db.create_tables([Place, Event, User, Subscription, Notification, NotificationEvent])
 
 app.include_router(subscription_router, prefix="/subscription", tags=["Subscriptions"])
 app.include_router(user_router, prefix="/user", tags=["Users"])

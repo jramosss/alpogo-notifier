@@ -41,4 +41,4 @@ class Event(BaseModel):
         """
 
     def __str__(self):
-        return f'{self.name} - {self.date} - {self.location} - {self.price} - {self.stillPlacesLeft} - {self.url}'
+        return f'{self.id} - {self.name} - {self.date} - {self.location} - {self.price} - {self.stillPlacesLeft} - {self.url}'

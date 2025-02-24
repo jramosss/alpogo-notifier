@@ -21,4 +21,4 @@ class Subscription(BaseModel):
 
 
     def __str__(self):
-        return f"{self.user.id} - {self.event_id}"
+        return f"Subscription for user {self.user.id} {self.user.email} - {self.place.name}"

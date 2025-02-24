@@ -1,10 +1,24 @@
+from os import system
+
 import pytest
 from models.Place import Place
 from models.Subscription import Subscription
 from models.User import User
+from models.Event import Event
+from models.Notification import Notification
+from utils.database import db
 from services.auth import create_access_token
 from mixer.backend.peewee import mixer
 
+from utils.database import setup_database
+
+
+@pytest.fixture(autouse=True, scope="session")
+def setup():
+    setup_database()
+    db.create_tables([Place, Event, User, Subscription, Notification])
+    yield
+    system("rm -rf test.db")
 
 @pytest.fixture
 def test_user():
