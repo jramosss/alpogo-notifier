@@ -8,6 +8,7 @@ from models.User import User
 from mixer.backend.peewee import mixer
 from utils.database import db
 
+from models.Subscription import Subscription
 from crons.notifier import notify
 from utils.email import EmailUtils
 from pytest_mock import MockerFixture
@@ -23,6 +24,8 @@ def test_send_notification_email(mocker: MockerFixture):
     place = mixer.blend(Place)
     another_place = mixer.blend(Place)
     user = mixer.blend(User)
+    another_user = mixer.blend(User)
+    subscription = mixer.blend(Subscription, place=place, user=user, is_active=True)
 
     with db.atomic():
         Event.bulk_create(
