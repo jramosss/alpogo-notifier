@@ -10,7 +10,11 @@ client = TestClient(app)
 
 @pytest.fixture
 def place():
-    return mixer.blend(Place, image_url="https://example.com/image.jpg")
+    return mixer.blend(
+        Place,
+        image_url="https://example.com/image.jpg",
+        location="Córdoba",
+    )
 
 
 @pytest.fixture
