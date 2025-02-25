@@ -82,9 +82,5 @@ class PlacesScraper(Scraper):
         places_elements = self.find_places()
         return self.create_places(places_elements)
 
-    def setup(self):
-        service = webdriver.ChromeService()
-        self.driver = webdriver.Chrome(service=service)
-
     def teardown(self):
         self.driver.quit()
