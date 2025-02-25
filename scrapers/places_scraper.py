@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
+from selenium.webdriver.chrome.options import Options as DriverOptions
 
 from scrapers.Scraper import Scraper
 from utils.constants import ALPOGO_URL
@@ -16,8 +17,15 @@ import toolz
 class PlacesScraper(Scraper):
     driver: webdriver.Chrome | None
 
-    def __init__(self, pages_to_scrape=3, time_to_wait=0.5):
-        self.driver = None
+    def __init__(
+        self,
+        *,
+        pages_to_scrape=3,
+        time_to_wait=0.5,
+        driver_options: DriverOptions = None,
+    ):
+        print(driver_options.__dict__)
+        self.driver = webdriver.Chrome(options=driver_options)
         self.pages_to_scrape = pages_to_scrape
         self.time_to_wait = time_to_wait
         super().__init__()
@@ -47,7 +55,7 @@ class PlacesScraper(Scraper):
                 url=href,
                 id=self.get_place_id_from_href(href),
                 image_url=self.get_place_image(href),
-                location=location,
+                location=location.strip(),
             )
         except Exception as e:
             print(f"Error creating place {place_element}")
@@ -65,8 +73,11 @@ class PlacesScraper(Scraper):
         places_elements = [place for place in places_elements if place.text]
         return list(toolz.unique(places_elements, key=lambda x: x.text))
 
-    def scrape(self):
+    def get_page(self):
         self.driver.get(f"{ALPOGO_URL}")
+
+    def scrape(self):
+        self.get_page()
         self.driver.implicitly_wait(self.time_to_wait)
         self.load_pages()
         places_elements = self.find_places()
