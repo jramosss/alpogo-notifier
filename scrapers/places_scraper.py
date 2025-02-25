@@ -24,7 +24,6 @@ class PlacesScraper(Scraper):
         time_to_wait=0.5,
         driver_options: DriverOptions = None,
     ):
-        print(driver_options.__dict__)
         self.driver = webdriver.Chrome(options=driver_options)
         self.pages_to_scrape = pages_to_scrape
         self.time_to_wait = time_to_wait
