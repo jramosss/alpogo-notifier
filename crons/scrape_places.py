@@ -1,6 +1,5 @@
 from concurrent.futures.thread import ThreadPoolExecutor
 
-from fastapi_utilities import repeat_every
 from peewee import IntegrityError
 
 from scrapers.places_scraper import PlacesScraper
@@ -11,17 +10,18 @@ setup_database()
 db.create_tables([Place])
 
 
-@repeat_every(seconds=86400)
+# @repeat_every(seconds=86400)
 def create_or_update_image(place: Place):
+    if not place:
+        return
     try:
-        Place.create(
-            name=place.name, url=place.url, id=place.id, image_url=place.image_url
-        )
+        Place.create(**place.__dict__)
     except IntegrityError:
         if place.image_url:
             return
         existing_place = Place.get(Place.id == place.id)
         existing_place.image_url = place.image_url
+        existing_place.location = place.location
         existing_place.save()
 
 

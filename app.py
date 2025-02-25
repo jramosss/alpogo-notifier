@@ -1,12 +1,11 @@
 from dotenv import load_dotenv
 import os
 
-from models.Notification import Notification
-from models.NotificationEvent import NotificationEvent
-
 env_file = ".env.development" if os.getenv("ENV") == "DEV" else ".env.test"
 load_dotenv(env_file)
 
+from models.Notification import Notification
+from models.NotificationEvent import NotificationEvent
 from fastapi import FastAPI
 
 from utils.database import setup_database, db

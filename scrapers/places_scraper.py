@@ -39,11 +39,15 @@ class PlacesScraper(Scraper):
     def create_place(self, place_element: WebElement):
         try:
             href = place_element.get_attribute("href")
+            splitted_name = place_element.text.split(",")
+            name = splitted_name[0]
+            location = splitted_name[1] if len(splitted_name) > 1 else ""
             return Place(
-                name=place_element.text,
+                name=name,
                 url=href,
                 id=self.get_place_id_from_href(href),
                 image_url=self.get_place_image(href),
+                location=location,
             )
         except Exception as e:
             print(f"Error creating place {place_element}")
