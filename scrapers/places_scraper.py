@@ -34,10 +34,12 @@ class PlacesScraper(Scraper):
             self.driver.find_element(by=By.ID, value="cargar-eventos").click()
             sleep(self.time_to_wait)
 
-    def get_place_id_from_href(self, href: str):
+    @staticmethod
+    def __get_place_id_from_href(href: str):
         return int(href.split("/")[-1])
 
-    def get_place_image(self, place_url: str):
+    @staticmethod
+    def __get_place_image(place_url: str):
         page = requests.get(place_url)
         soup = BeautifulSoup(page.text, "html.parser")
         img_element = soup.find("img", class_="background-banda")
@@ -52,8 +54,8 @@ class PlacesScraper(Scraper):
             return Place(
                 name=name,
                 url=href,
-                id=self.get_place_id_from_href(href),
-                image_url=self.get_place_image(href),
+                id=self.__get_place_id_from_href(href),
+                image_url=self.__get_place_image(href),
                 location=location.strip(),
             )
         except Exception as e:

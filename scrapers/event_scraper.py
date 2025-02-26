@@ -17,12 +17,14 @@ class EventScraper(Scraper):
         response = requests.get(f"{ALPOGO_URL}/lugar/{self.place_id}")
         return response.text
 
-    def __get_events(self, html: str):
+    @staticmethod
+    def __get_events(html: str):
         soup = BeautifulSoup(html, "html.parser")
         row = soup.find("div", class_="row eventos")
         return row.find_all("div", class_="evento-container")
 
-    def get_text_safely(self, element: Tag):
+    @staticmethod
+    def __get_text_safely(element: Tag):
         if element:
             return element.text
         print(f"Failed to get text of element {element}")

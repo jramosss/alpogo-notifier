@@ -13,7 +13,7 @@ def test_scrape_all_events(mocker):
 
     first_event = events[0]
     assert first_event.name == "Festi Surfer Rosas"
-    assert first_event.stillPlacesLeft == True
+    assert first_event.stillPlacesLeft
     assert first_event.date == datetime(2025, 2, 18, 00, 1)
     assert int(first_event.price) == 5000
     assert (
@@ -34,7 +34,7 @@ def test_scrape_casa_astral(mocker):
 
     first_event = events[0]
     assert first_event.name == "Musica a Ciegas - Led Zeppelin"
-    assert first_event.stillPlacesLeft == True
+    assert first_event.stillPlacesLeft
     assert first_event.date == datetime(2025, 2, 21, 21, 30)
     assert int(first_event.price) == 8500
     assert (
@@ -48,4 +48,4 @@ def test_scrape_casa_astral(mocker):
     pink_floyd = events[6]
 
     assert pink_floyd.name == "Musica a Ciegas - Pink Floyd"
-    assert pink_floyd.stillPlacesLeft == False
+    assert not pink_floyd.stillPlacesLeft
