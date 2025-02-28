@@ -28,7 +28,7 @@ class PlacesScraper(Scraper):
         options.add_argument("--ignore-ssl-errors=yes")
         options.add_argument("--ignore-certificate-errors")
         self.driver = webdriver.Remote(
-            command_executor="http://localhost:4444/wd/hub",
+            command_executor="http://selenium:4444/wd/hub",
             options=options,
         )
         self.pages_to_scrape = pages_to_scrape
@@ -57,6 +57,7 @@ class PlacesScraper(Scraper):
             splitted_name = place_element.text.split(",")
             name = splitted_name[0]
             location = splitted_name[1] if len(splitted_name) > 1 else ""
+            print("place", name, href)
             return Place(
                 name=name,
                 url=href,
@@ -77,6 +78,7 @@ class PlacesScraper(Scraper):
         places_elements = self.driver.find_elements(
             by=By.CLASS_NAME, value="lugar-link"
         )
+        print([f"{p.text} {p.get_attribute('href')}" for p in places_elements])
         places_elements = [place for place in places_elements if place.text]
         return list(toolz.unique(places_elements, key=lambda x: x.text))
 

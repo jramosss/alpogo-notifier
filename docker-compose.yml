@@ -31,6 +31,10 @@ services:
       - selenium_net
     environment:
       - PYTHONPATH=/code
+    command: >
+      /bin/bash -c "
+        /code/wait-for-it.sh mock_server:8080 -- /code/wait-for-it.sh selenium_chromium:4444 -- pytest -vv -s
+      "
     stdin_open: true
     tty: true
 

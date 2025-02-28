@@ -15,4 +15,4 @@ COPY . .
 ENV PYTHONPATH=/code
 
 # Run pytest when the container starts
-CMD ["pytest", "-vv", "-s", "tests/scrapers/test_places_scraper.py"]
+#CMD ["pytest", "-s", "tests/scrapers/test_places_scraper.py"]
