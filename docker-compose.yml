@@ -1,0 +1,25 @@
+services:
+  selenium:
+    image: selenium/standalone-chromium:latest
+    container_name: selenium_chromium
+    ports:
+      - "4444:4444"
+      - "7900:7900"
+    shm_size: "2g"
+    networks:
+      - selenium_net
+
+  pytest_runner:
+    build: .
+    volumes:
+      - .:/code
+    networks:
+      - selenium_net
+    environment:
+      - PYTHONPATH=/code
+    stdin_open: true
+    tty: true
+
+networks:
+  selenium_net:
+    driver: bridge

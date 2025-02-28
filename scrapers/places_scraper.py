@@ -24,7 +24,13 @@ class PlacesScraper(Scraper):
         time_to_wait=0.5,
         driver_options: DriverOptions = None,
     ):
-        self.driver = webdriver.Chrome(options=driver_options)
+        options: DriverOptions = driver_options or DriverOptions()
+        options.add_argument("--ignore-ssl-errors=yes")
+        options.add_argument("--ignore-certificate-errors")
+        self.driver = webdriver.Remote(
+            command_executor="http://selenium:4444/wd/hub",
+            options=options,
+        )
         self.pages_to_scrape = pages_to_scrape
         self.time_to_wait = time_to_wait
         super().__init__()

@@ -18,7 +18,6 @@ smtp_port = os.getenv("SMTP_PORT")
 
 class EmailUtils:
     def send_email(self, to: list[str], events: list[Event]):
-        print("Hi im send email", to, events)
         msg = MIMEMultipart()
         msg["Subject"] = "Eventos de musica a ciegas este mes"
         me = TEST_EMAIL
