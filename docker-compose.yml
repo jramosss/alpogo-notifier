@@ -9,7 +9,21 @@ services:
     networks:
       - selenium_net
 
+  mock_server:
+    image: node:16-alpine
+    container_name: mock_server
+    command: ["npx", "http-server", "/mocks", "-p", "8080", "--host", "0.0.0.0"]
+    volumes:
+      - ./mocks:/mocks
+    ports:
+      - "8080:8080"
+    networks:
+      - selenium_net
+
   pytest_runner:
+    depends_on:
+      - selenium
+      - mock_server
     build: .
     volumes:
       - .:/code

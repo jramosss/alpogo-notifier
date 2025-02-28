@@ -1,5 +1,4 @@
 from scrapers.places_scraper import PlacesScraper
-from pathlib import Path
 from selenium.webdriver.chrome.options import Options
 import socket
 
@@ -11,14 +10,9 @@ def pytest_configure(config):
 def test_places_scraper(mocker):
     options = Options()
     options.add_argument("--headless=new")
-    scraper = PlacesScraper(pages_to_scrape=5, driver_options=options, time_to_wait=2)
+    scraper = PlacesScraper(pages_to_scrape=5, driver_options=options, time_to_wait=0.1)
     mocker.patch.object(scraper, "get_page")
-    mock_html_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "mocks"
-        / "alpogo_interactive.html"
-    ).absolute()
-    scraper.driver.get(f"file:///{mock_html_path}")
+    scraper.driver.get("http://mock_server:8080/alpogo_interactive.html")
     places = scraper.scrape()
     expected_places = [
         "1915 eventos",

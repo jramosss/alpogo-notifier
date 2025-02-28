@@ -28,7 +28,7 @@ class PlacesScraper(Scraper):
         options.add_argument("--ignore-ssl-errors=yes")
         options.add_argument("--ignore-certificate-errors")
         self.driver = webdriver.Remote(
-            command_executor="http://selenium:4444/wd/hub",
+            command_executor="http://localhost:4444/wd/hub",
             options=options,
         )
         self.pages_to_scrape = pages_to_scrape
@@ -91,4 +91,5 @@ class PlacesScraper(Scraper):
         return self.create_places(places_elements)
 
     def teardown(self):
-        self.driver.quit()
+        # self.driver.quit()
+        pass
